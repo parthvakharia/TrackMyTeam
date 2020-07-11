@@ -1,9 +1,10 @@
-import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
 
-import LoginScreen from "../login";
-import HomeNavigator from "../home/HomeNavigator";
-import RegisterScreen from "../register";
+import LoginScreen from '../login';
+import HomeNavigator from '../home/HomeNavigator';
+import RegisterScreen from '../register';
+import Map from '../map/Map';
 
 const Stack = createStackNavigator();
 const NO_HEADER = () => {
@@ -28,6 +29,7 @@ const RootNavigation = () => (
         }}
       />
       <Stack.Screen name="HomeNavigator" component={HomeNavigator} />
+      <Stack.Screen name="Map" component={Map} />
     </Stack.Navigator>
     {/* <Drawer.Navigator>
       <Drawer.Screen name="Home" component={HomeScreen} />

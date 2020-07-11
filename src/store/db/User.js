@@ -1,8 +1,8 @@
-import { getFirebaseInstance } from "../Firebase";
-import { extractDataFromQuery } from "./utils";
+import { getFirebaseInstance } from '../Firebase';
+import { extractDataFromQuery } from './utils';
 
 const db = getFirebaseInstance();
-const usersCollection = db.collection("users");
+const usersCollection = db.collection('users');
 
 export const addUser = async ({
   uid,
@@ -25,7 +25,7 @@ export const addUser = async ({
 };
 export const getUser = async (uid) => {
   try {
-    const qs = await usersCollection.where("uid", "==", uid).limit(1).get();
+    const qs = await usersCollection.where('uid', '==', uid).limit(1).get();
     const user = extractDataFromQuery(qs)[0];
     return user;
   } catch (e) {

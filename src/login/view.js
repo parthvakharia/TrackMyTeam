@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import WelcomeScreen from "./WelcomeScreen";
-import LoginForm from "./LoginForm";
+import WelcomeScreen from './WelcomeScreen';
+import LoginForm from './LoginForm';
 
 const LoginScreen = () => {
   const [viewLogin, toggleLogin] = useState(false);

@@ -1,2 +1,2 @@
-import Login from "./view";
+import Login from './view';
 export default Login;

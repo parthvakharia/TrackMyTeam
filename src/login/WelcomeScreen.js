@@ -1,14 +1,13 @@
-import React from "react";
-import { View, StyleSheet, Text } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import React from 'react';
+import { View, StyleSheet, Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-import { RoundButton } from "../common";
-import colors from "../common/Colors";
+import { RoundButton, Colors } from '../common';
 
 const WelcomeScreen = ({ toggleLogin }) => {
   const navigation = useNavigation();
   const navigate = (path) => () => {
-    if (path === "LoginForm") {
+    if (path === 'LoginForm') {
       toggleLogin(true);
       return;
     }
@@ -18,22 +17,14 @@ const WelcomeScreen = ({ toggleLogin }) => {
   return (
     <View style={styles.welcomeContainer}>
       <Text style={[styles.welcomeText, styles.mb60]}>
-        Welcome to {"\n"} Track My Team
+        Welcome to {'\n'} Track My Team
       </Text>
       <RoundButton
         title="Log In"
-        color={colors.green}
-        borderColor={colors.green}
-        textStyle={{ color: colors.white }}
-        onPress={navigate("LoginForm")}
+        color="green"
+        onPress={navigate('LoginForm')}
       />
-      <RoundButton
-        title="Sign Up"
-        color={colors.white}
-        borderColor={colors.green}
-        textStyle={{ color: colors.green }}
-        onPress={navigate("Register")}
-      />
+      <RoundButton title="Sign Up" onPress={navigate('Register')} />
     </View>
   );
 };
@@ -41,16 +32,16 @@ const WelcomeScreen = ({ toggleLogin }) => {
 const styles = StyleSheet.create({
   welcomeContainer: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#fff",
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
   },
   welcomeText: {
     fontSize: 30,
     lineHeight: 36,
-    fontWeight: "400",
-    textAlign: "center",
-    color: colors.green,
+    fontWeight: '400',
+    textAlign: 'center',
+    color: Colors.green,
   },
   mb60: { marginBottom: 60 },
 });
