@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "589934710592",
+    "firebase_url": "https://trackmyteam-282508.firebaseio.com",
+    "project_id": "trackmyteam-282508",
+    "storage_bucket": "trackmyteam-282508.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:589934710592:android:0c24690519898d0bc174a5",
+        "android_client_info": {
+          "package_name": "com.trackmyteam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "589934710592-osrfatmsfo1r1snl6f7fk5ch8r6jsk9g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.trackmyteam",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "589934710592-etahok8enrr2nmvn9hcequki38bndrcu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAwY13VuMkGmZVGgJQsLIvxRXZxHSCL1M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "589934710592-etahok8enrr2nmvn9hcequki38bndrcu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
