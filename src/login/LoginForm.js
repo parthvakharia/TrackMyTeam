@@ -1,5 +1,11 @@
-import React, { useContext, useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useContext, useState, useEffect } from 'react';
+import {
+  StyleSheet,
+  Text,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import StoreContext from '../store';
@@ -43,10 +49,14 @@ const LoginForm = ({ toggleLogin }) => {
     } catch {}
   };
   const loginIn = async () => {
+    Keyboard.dismiss();
     const { username, password } = state;
     if (username && password) {
       const user = await signIn(store, dispatch, { email: username, password });
-      navigation.navigate('HomeNavigator');
+      console.log(user);
+      if (user) {
+        navigation.navigate('HomeNavigator');
+      }
     }
   };
 
@@ -60,8 +70,6 @@ const LoginForm = ({ toggleLogin }) => {
       <AnimatedInput
         ref={usernameRef}
         placeholder="Username"
-        autoCapitalize="none"
-        autoCompleteType="off"
         keyboardType={keyboardType}
         onSubmitEditing={focusField('password')}
         onChangeText={onInputChange('username')}

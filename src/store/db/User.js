@@ -8,6 +8,7 @@ export const addUser = async ({
   uid,
   username,
   email,
+  phoneNumber,
   profilePicture,
   currentLocation,
 }) => {
@@ -16,6 +17,7 @@ export const addUser = async ({
       uid,
       username,
       email,
+      phoneNumber,
       profilePicture,
       currentLocation,
     });

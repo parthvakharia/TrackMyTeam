@@ -1,5 +1,3 @@
-import React, { memo } from 'react';
-import * as FirebaseCore from 'expo-firebase-core';
 import * as firebase from 'firebase';
 import { addUser, getUser } from './db/User';
 import { SET_USER, IS_LOADING, GLOBAL_ERROR } from './ActionTypes';
@@ -35,20 +33,28 @@ export const signIn = async (store, dispatch, payload) => {
     ];
     actions.map(dispatch);
     console.log(e);
+    return false;
   }
 };
 
-export const registerUser = memo(async (store, dispatch, payload) => {
+export const register = async (store, dispatch, payload) => {
   const { email, password } = payload;
   try {
+    dispatch({ type: IS_LOADING, payload: true });
     const { user } = await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password);
 
     await addUser({ ...payload, uid: user.uid });
-    const userObj = await getUser(user.uid);
-    dispatch({ type: SET_USER, payload: userObj });
+    dispatch({ type: IS_LOADING, payload: false });
+    return true;
   } catch (e) {
+    const actions = [
+      { type: IS_LOADING, payload: false },
+      { type: GLOBAL_ERROR, payload: e },
+    ];
+    actions.map(dispatch);
     console.log(e);
+    return false;
   }
-});
+};

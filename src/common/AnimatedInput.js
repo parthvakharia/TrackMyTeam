@@ -24,6 +24,8 @@ const AnimatedInput = React.forwardRef(
       <TouchableHighlight style={[styles.container, wrapperStyle]}>
         <TextInput
           ref={ref}
+          autoCapitalize="none"
+          autoCompleteType="off"
           returnKeyLabel={returnKeyLabel}
           returnKeyType={returnKeyLabel}
           placeholderTextColor={Colors.darkGrey}
