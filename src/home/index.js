@@ -1,9 +1,2 @@
-import React from 'react';
-import { View, Text } from 'react-native';
-const HomeScreen = () => (
-  <View>
-    <Text>Home</Text>
-  </View>
-);
-
-export default HomeScreen;
+import HomeNavigator from '../navigation/DrawerNavigator';
+export default HomeNavigator;

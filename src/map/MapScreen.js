@@ -6,6 +6,7 @@ import * as Location from 'expo-location';
 
 import StoreContext from '../store';
 import { registerUser, signIn } from '../store/AuthActions';
+import ViewWithHeader from '../common/Header';
 
 const dummyUser = {
   username: 'htrap007',
@@ -59,7 +60,7 @@ const groupUsersLocations = [
   },
 ];
 
-class Map extends React.Component {
+class MapScreen extends React.Component {
   static contextType = StoreContext;
   state = {
     statusBarHeight: 0,
@@ -69,12 +70,16 @@ class Map extends React.Component {
       latitudeDelta: 0.0922,
       longitudeDelta: 0.0421,
     },
+    mapDimension: {
+      width: '100%',
+      height: 100,
+    },
   };
 
   componentDidMount() {
     this.getLocation();
     const { store, dispatch } = this.context;
-    signIn(store, dispatch, dummyUser);
+    // signIn(store, dispatch, dummyUser);
     setTimeout(() => this.setState({ statusBarHeight: 2 }), 500);
   }
 
@@ -102,21 +107,35 @@ class Map extends React.Component {
   };
 
   render() {
-    const { initialRegion, statusBarHeight } = this.state;
+    const { initialRegion, statusBarHeight, mapDimension } = this.state;
     return (
-      <View style={[styles.container, { paddingTop: statusBarHeight }]}>
-        <MapView
-          showsUserLocation
-          showsMyLocationButton
-          provider={PROVIDER_GOOGLE}
-          region={initialRegion}
-          style={styles.mapStyle}
+      <ViewWithHeader>
+        <View
+          style={[styles.container, { paddingTop: statusBarHeight }]}
+          onLayout={(event) => {
+            var { x, y, width, height } = event.nativeEvent.layout;
+            this.setState({
+              mapDimension: {
+                ...mapDimension,
+                height,
+              },
+            });
+            console.log(x, y, width, height);
+          }}
         >
-          {groupUsersLocations.map((user, index) => (
-            <MapMarker user={user} index={index} />
-          ))}
-        </MapView>
-      </View>
+          <MapView
+            showsUserLocation
+            showsMyLocationButton
+            provider={PROVIDER_GOOGLE}
+            region={initialRegion}
+            style={[styles.mapStyle, mapDimension]}
+          >
+            {groupUsersLocations.map((user, index) => (
+              <MapMarker user={user} index={index} />
+            ))}
+          </MapView>
+        </View>
+      </ViewWithHeader>
     );
   }
 }
@@ -129,8 +148,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   mapStyle: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    // width: '100%',
+    // height: 50,
   },
 });
-export default Map;
+export default MapScreen;

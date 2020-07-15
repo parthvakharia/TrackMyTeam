@@ -1,19 +1,20 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 import LoginScreen from '../login';
-import HomeNavigator from '../home/HomeNavigator';
+import DrawerNavigator from './DrawerNavigator';
 import RegisterScreen from '../register';
-import Map from '../map/Map';
 
 const Stack = createStackNavigator();
+
 const NO_HEADER = () => {
   return null;
 };
 
 const RootNavigation = () => (
   <>
-    <Stack.Navigator initialRouteName="Login">
+    <Stack.Navigator initialRouteName="Home">
       <Stack.Screen
         name="Login"
         component={LoginScreen}
@@ -28,12 +29,14 @@ const RootNavigation = () => (
           header: NO_HEADER,
         }}
       />
-      <Stack.Screen name="HomeNavigator" component={HomeNavigator} />
-      <Stack.Screen name="Map" component={Map} />
+      <Stack.Screen
+        name="Home"
+        component={DrawerNavigator}
+        options={{
+          header: NO_HEADER,
+        }}
+      />
     </Stack.Navigator>
-    {/* <Drawer.Navigator>
-      <Drawer.Screen name="Home" component={HomeScreen} />
-    </Drawer.Navigator> */}
   </>
 );
 
