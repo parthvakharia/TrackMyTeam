@@ -8,14 +8,26 @@ import Constants from 'expo-constants';
 import StoreContext from './src/store';
 import RootNavigation from './src/navigation';
 import { Colors, Loading, ErrorModal } from './src/common';
+import { gql, useQuery } from '@apollo/client';
 import './Setup';
+
+const GET_USERS = gql`
+  query GetAllUsers {
+    users {
+      nodes {
+        id
+      }
+    }
+  }
+`;
 
 const Layout = () => {
   const {
     store: { isLoading, error },
     dispatch,
   } = useContext(StoreContext);
-
+  const { loading, error:error1, data } = useQuery(GET_USERS);
+  console.log(loading, error1, data);
   return (
     <>
       <StatusBar style="auto" />
