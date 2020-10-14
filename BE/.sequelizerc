@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+  'env': 'dev',
   'config': path.resolve('config', 'db.json'),
   'models-path': path.resolve('db', 'models'),
   'seeders-path': path.resolve('db', 'seeders'),

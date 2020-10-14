@@ -1,6 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    await queryInterface.sequelize.query('CREATE EXTENSION IF NOT EXISTS postgis');
     await queryInterface.createTable('Users', {
       id: {
         allowNull: false,
@@ -15,7 +16,21 @@ module.exports = {
         type: Sequelize.STRING
       },
       email: {
+        type: Sequelize.STRING,
+        unique: true 
+      },
+      phone: {
+        type: Sequelize.STRING,
+        unique: true 
+      },
+      password: {
         type: Sequelize.STRING
+      },
+      location: {
+        type: Sequelize.GEOMETRY
+      },
+      isVerified: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,

@@ -10,5 +10,5 @@ require('./boot/sequelize');
 app.use(postgraphile);
 require('./boot/routes')(app);
 
-console.log(`node_mongo_boilerplate listening on ${config.PORT}`);
+console.log(`Track My Tram listening on ${config.PORT}`);
 app.listen(config.PORT);

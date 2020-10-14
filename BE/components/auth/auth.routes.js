@@ -11,9 +11,9 @@ const validationSchema = {
   register: joi.object({
     firstName: joi.string().required(),
     lastName: joi.string().required(),
-    location: joi.string().required(),
+    location: joi.array().required(),
     email: joi.string().email().required(),
-    picture: joi.string(),
+    password: joi.string().required(),
   }),
   login: joi.object({
     email: joi.string().email().required(),

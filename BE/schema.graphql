@@ -1,3 +1,38 @@
+"""All input for the create `SequelizeMeta` mutation."""
+input CreateSequelizeMetaInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `SequelizeMeta` to be created by this mutation."""
+  sequelizeMeta: SequelizeMetaInput!
+}
+
+"""The output of our create `SequelizeMeta` mutation."""
+type CreateSequelizeMetaPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `SequelizeMeta` that was created by this mutation."""
+  sequelizeMeta: SequelizeMeta
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `SequelizeMeta`. May be used by Relay 1."""
+  sequelizeMetaEdge(
+    """The method to use when ordering `SequelizeMeta`."""
+    orderBy: [SequelizeMetasOrderBy!] = [PRIMARY_KEY_ASC]
+  ): SequelizeMetasEdge
+}
+
 """All input for the create `User` mutation."""
 input CreateUserInput {
   """
@@ -42,6 +77,64 @@ A point in time as described by the [ISO
 """
 scalar Datetime
 
+"""All input for the `deleteSequelizeMetaByNodeId` mutation."""
+input DeleteSequelizeMetaByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `SequelizeMeta` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteSequelizeMeta` mutation."""
+input DeleteSequelizeMetaInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  name: String!
+}
+
+"""The output of our delete `SequelizeMeta` mutation."""
+type DeleteSequelizeMetaPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `SequelizeMeta` that was deleted by this mutation."""
+  sequelizeMeta: SequelizeMeta
+  deletedSequelizeMetaNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `SequelizeMeta`. May be used by Relay 1."""
+  sequelizeMetaEdge(
+    """The method to use when ordering `SequelizeMeta`."""
+    orderBy: [SequelizeMetasOrderBy!] = [PRIMARY_KEY_ASC]
+  ): SequelizeMetasEdge
+}
+
+"""All input for the `deleteUserByEmail` mutation."""
+input DeleteUserByEmailInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  email: String!
+}
+
 """All input for the `deleteUserByNodeId` mutation."""
 input DeleteUserByNodeIdInput {
   """
@@ -54,6 +147,16 @@ input DeleteUserByNodeIdInput {
   The globally unique `ID` which will identify a single `User` to be deleted.
   """
   nodeId: ID!
+}
+
+"""All input for the `deleteUserByPhone` mutation."""
+input DeleteUserByPhoneInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  phone: String!
 }
 
 """All input for the `deleteUser` mutation."""
@@ -94,6 +197,14 @@ type DeleteUserPayload {
 The root mutation type which contains root level fields which mutate data.
 """
 type Mutation {
+  """Creates a single `SequelizeMeta`."""
+  createSequelizeMeta(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateSequelizeMetaInput!
+  ): CreateSequelizeMetaPayload
+
   """Creates a single `User`."""
   createUser(
     """
@@ -101,6 +212,24 @@ type Mutation {
     """
     input: CreateUserInput!
   ): CreateUserPayload
+
+  """
+  Updates a single `SequelizeMeta` using its globally unique id and a patch.
+  """
+  updateSequelizeMetaByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateSequelizeMetaByNodeIdInput!
+  ): UpdateSequelizeMetaPayload
+
+  """Updates a single `SequelizeMeta` using a unique key and a patch."""
+  updateSequelizeMeta(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateSequelizeMetaInput!
+  ): UpdateSequelizeMetaPayload
 
   """Updates a single `User` using its globally unique id and a patch."""
   updateUserByNodeId(
@@ -118,6 +247,38 @@ type Mutation {
     input: UpdateUserInput!
   ): UpdateUserPayload
 
+  """Updates a single `User` using a unique key and a patch."""
+  updateUserByEmail(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserByEmailInput!
+  ): UpdateUserPayload
+
+  """Updates a single `User` using a unique key and a patch."""
+  updateUserByPhone(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserByPhoneInput!
+  ): UpdateUserPayload
+
+  """Deletes a single `SequelizeMeta` using its globally unique id."""
+  deleteSequelizeMetaByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteSequelizeMetaByNodeIdInput!
+  ): DeleteSequelizeMetaPayload
+
+  """Deletes a single `SequelizeMeta` using a unique key."""
+  deleteSequelizeMeta(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteSequelizeMetaInput!
+  ): DeleteSequelizeMetaPayload
+
   """Deletes a single `User` using its globally unique id."""
   deleteUserByNodeId(
     """
@@ -132,6 +293,22 @@ type Mutation {
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
     """
     input: DeleteUserInput!
+  ): DeleteUserPayload
+
+  """Deletes a single `User` using a unique key."""
+  deleteUserByEmail(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserByEmailInput!
+  ): DeleteUserPayload
+
+  """Deletes a single `User` using a unique key."""
+  deleteUserByPhone(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserByPhoneInput!
   ): DeleteUserPayload
 }
 
@@ -177,6 +354,35 @@ type Query implements Node {
     nodeId: ID!
   ): Node
 
+  """Reads and enables pagination through a set of `SequelizeMeta`."""
+  sequelizeMetas(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `SequelizeMeta`."""
+    orderBy: [SequelizeMetasOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: SequelizeMetaCondition
+  ): SequelizeMetasConnection
+
   """Reads and enables pagination through a set of `User`."""
   users(
     """Only read the first `n` values of the set."""
@@ -205,13 +411,160 @@ type Query implements Node {
     """
     condition: UserCondition
   ): UsersConnection
+  sequelizeMeta(name: String!): SequelizeMeta
   user(id: Int!): User
+  userByEmail(email: String!): User
+  userByPhone(phone: String!): User
+
+  """Reads a single `SequelizeMeta` using its globally unique `ID`."""
+  sequelizeMetaByNodeId(
+    """
+    The globally unique `ID` to be used in selecting a single `SequelizeMeta`.
+    """
+    nodeId: ID!
+  ): SequelizeMeta
 
   """Reads a single `User` using its globally unique `ID`."""
   userByNodeId(
     """The globally unique `ID` to be used in selecting a single `User`."""
     nodeId: ID!
   ): User
+}
+
+type SequelizeMeta implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  name: String!
+}
+
+"""
+A condition to be used against `SequelizeMeta` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input SequelizeMetaCondition {
+  """Checks for equality with the object’s `name` field."""
+  name: String
+}
+
+"""An input for mutations affecting `SequelizeMeta`"""
+input SequelizeMetaInput {
+  name: String!
+}
+
+"""
+Represents an update to a `SequelizeMeta`. Fields that are set will be updated.
+"""
+input SequelizeMetaPatch {
+  name: String
+}
+
+"""A connection to a list of `SequelizeMeta` values."""
+type SequelizeMetasConnection {
+  """A list of `SequelizeMeta` objects."""
+  nodes: [SequelizeMeta!]!
+
+  """
+  A list of edges which contains the `SequelizeMeta` and cursor to aid in pagination.
+  """
+  edges: [SequelizeMetasEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `SequelizeMeta` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `SequelizeMeta` edge in the connection."""
+type SequelizeMetasEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `SequelizeMeta` at the end of the edge."""
+  node: SequelizeMeta!
+}
+
+"""Methods to use when ordering `SequelizeMeta`."""
+enum SequelizeMetasOrderBy {
+  NATURAL
+  NAME_ASC
+  NAME_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""All input for the `updateSequelizeMetaByNodeId` mutation."""
+input UpdateSequelizeMetaByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `SequelizeMeta` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `SequelizeMeta` being updated.
+  """
+  patch: SequelizeMetaPatch!
+}
+
+"""All input for the `updateSequelizeMeta` mutation."""
+input UpdateSequelizeMetaInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `SequelizeMeta` being updated.
+  """
+  patch: SequelizeMetaPatch!
+  name: String!
+}
+
+"""The output of our update `SequelizeMeta` mutation."""
+type UpdateSequelizeMetaPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `SequelizeMeta` that was updated by this mutation."""
+  sequelizeMeta: SequelizeMeta
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `SequelizeMeta`. May be used by Relay 1."""
+  sequelizeMetaEdge(
+    """The method to use when ordering `SequelizeMeta`."""
+    orderBy: [SequelizeMetasOrderBy!] = [PRIMARY_KEY_ASC]
+  ): SequelizeMetasEdge
+}
+
+"""All input for the `updateUserByEmail` mutation."""
+input UpdateUserByEmailInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `User` being updated.
+  """
+  patch: UserPatch!
+  email: String!
 }
 
 """All input for the `updateUserByNodeId` mutation."""
@@ -231,6 +584,21 @@ input UpdateUserByNodeIdInput {
   An object where the defined keys will be set on the `User` being updated.
   """
   patch: UserPatch!
+}
+
+"""All input for the `updateUserByPhone` mutation."""
+input UpdateUserByPhoneInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `User` being updated.
+  """
+  patch: UserPatch!
+  phone: String!
 }
 
 """All input for the `updateUser` mutation."""
@@ -277,10 +645,13 @@ type User implements Node {
   """
   nodeId: ID!
   id: Int!
-  firstName: String!
+  firstName: String
   lastName: String
+  email: String
+  phone: String
   password: String
   location: String
+  isVerified: Boolean
   createdAt: Datetime!
   updatedAt: Datetime!
 }
@@ -291,15 +662,24 @@ A condition to be used against `User` object types. All fields are tested for eq
 input UserCondition {
   """Checks for equality with the object’s `id` field."""
   id: Int
+
+  """Checks for equality with the object’s `email` field."""
+  email: String
+
+  """Checks for equality with the object’s `phone` field."""
+  phone: String
 }
 
 """An input for mutations affecting `User`"""
 input UserInput {
   id: Int
-  firstName: String!
+  firstName: String
   lastName: String
+  email: String
+  phone: String
   password: String
   location: String
+  isVerified: Boolean
   createdAt: Datetime!
   updatedAt: Datetime!
 }
@@ -309,8 +689,11 @@ input UserPatch {
   id: Int
   firstName: String
   lastName: String
+  email: String
+  phone: String
   password: String
   location: String
+  isVerified: Boolean
   createdAt: Datetime
   updatedAt: Datetime
 }
@@ -346,6 +729,10 @@ enum UsersOrderBy {
   NATURAL
   ID_ASC
   ID_DESC
+  EMAIL_ASC
+  EMAIL_DESC
+  PHONE_ASC
+  PHONE_DESC
   PRIMARY_KEY_ASC
   PRIMARY_KEY_DESC
 }
