@@ -1,4 +1,4 @@
 npx sequelize-cli model:generate
 npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string,phone:string,password:string,location:geometry,isVerified:boolean
 
-npx 
+npx secuelize-cli migrate:db

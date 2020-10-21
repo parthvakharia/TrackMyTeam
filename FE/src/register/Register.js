@@ -3,23 +3,30 @@ import { View, Text, StyleSheet, Alert, Keyboard } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { AnimatedInput, RoundButton, Link, Colors } from '../common';
-import { register } from '../store/AuthActions';
+import { register,RegisterInUser } from '../store/AuthActions';
 import StoreContext from '../store';
+
 
 const RegisterScreen = () => {
   const keyboardType =
     Platform.OS === 'ios' ? 'ascii-capable' : 'email-address';
   const { store, dispatch } = useContext(StoreContext);
   const navigation = useNavigation();
-  const usernameRef = React.createRef();
+  const firstNameRef = React.createRef();
+  const lastNameRef = React.createRef();
   const emailRef = React.createRef();
   const phoneNumberRef = React.createRef();
   const passwordRef = React.createRef();
   const [state, setState] = useState({
-    username: '',
+    firstName: '',
+    lastName: '',
     phoneNumber: '',
     email: '',
     password: '',
+    location:[
+      21.7833,
+72.22334
+  ]
   });
   const onInputChange = (field) => (value) => {
     setState({
@@ -30,9 +37,12 @@ const RegisterScreen = () => {
   const focusField = (fieldName) => () => {
     try {
       switch (fieldName) {
-        case 'username':
-          usernameRef.current.focus();
+        case 'firstName':
+          firstNameRef.current.focus();
           break;
+          case 'lastName':
+            lastNameRef.current.focus();
+            break;
         case 'phoneNumber':
           phoneNumberRef.current.focus();
           break;
@@ -45,29 +55,61 @@ const RegisterScreen = () => {
       }
     } catch {}
   };
+  // const registerUser = async () => {
+  //   Keyboard.dismiss();
+  //   const success = await register(store, dispatch, { ...state });
+  //   if (success) {
+  //     Alert.alert(
+  //       'Register',
+  //       'User registered Successfully. Please login to use our service.',
+  //       [{ text: 'OK', onPress: () => navigation.navigate('Login') }],
+  //       { cancelable: false }
+  //     );
+  //   }
+  // };
+
+  
   const registerUser = async () => {
     Keyboard.dismiss();
-    const success = await register(store, dispatch, { ...state });
-    if (success) {
-      Alert.alert(
-        'Register',
-        'User registered Successfully. Please login to use our service.',
-        [{ text: 'OK', onPress: () => navigation.navigate('Login') }],
-        { cancelable: false }
-      );
-    }
+    // const success = await register(store, dispatch, { ...state });
+    // if (success) {
+    //   Alert.alert(
+    //     'Register',
+    //     'User registered Successfully. Please login to use our service.',
+    //     [{ text: 'OK', onPress: () => navigation.navigate('Login') }],
+    //     { cancelable: false }
+    //   );
+    // }
+
+    dispatch(RegisterInUser(...state)).then((res)=>{
+      if(res.success){
+        alert('successfull');
+      }
+    });
+
+
+
   };
+
+
   const disableBtn =
-    !state.username || !state.phoneNumber || !state.email || !state.password;
+  !state.firstName || !state.lastName || !state.phoneNumber || !state.email || !state.password;
   return (
     <View style={styles.container}>
       <Text style={styles.signInText}>Create new account</Text>
       <AnimatedInput
-        ref={usernameRef}
-        placeholder="Username"
+        ref={firstNameRef}
+        placeholder="firstName"
+        keyboardType={keyboardType}
+        onSubmitEditing={focusField('lastName')}
+        onChangeText={onInputChange('firstName')}
+      />
+      <AnimatedInput
+        ref={lastNameRef}
+        placeholder="lastName"
         keyboardType={keyboardType}
         onSubmitEditing={focusField('phoneNumber')}
-        onChangeText={onInputChange('username')}
+        onChangeText={onInputChange('lastName')}
       />
       <AnimatedInput
         ref={phoneNumberRef}

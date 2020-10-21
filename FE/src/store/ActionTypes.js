@@ -1,5 +1,6 @@
 export const GLOBAL_ERROR = 'GLOBAL_ERROR';
 export const IS_LOADING = 'IS_LOADING';
+export const SET_USER_DETAILS = 'SET_USER_DETAILS';
 
 export const SET_USER = 'SET_USER';
 

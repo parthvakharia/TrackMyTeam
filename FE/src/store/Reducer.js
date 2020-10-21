@@ -1,5 +1,5 @@
 import React from 'react';
-import { SET_USER, IS_LOADING, GLOBAL_ERROR } from './ActionTypes';
+import { SET_USER, IS_LOADING, GLOBAL_ERROR,SET_USER_DETAILS } from './ActionTypes';
 import * as _ from 'lodash';
 
 const reducer = (state, { type, payload }) => {
@@ -15,11 +15,16 @@ const reducer = (state, { type, payload }) => {
         ...state,
         user: payload,
       };
-    case GLOBAL_ERROR:
-      return {
-        ...state,
-        error: payload,
-      };
+      case GLOBAL_ERROR:
+        return {
+          ...state,
+          error: payload,
+        };
+        case SET_USER_DETAILS:
+          return {
+            ...state,
+            user: payload,
+          };
     default:
       return state;
   }

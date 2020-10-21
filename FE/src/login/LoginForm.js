@@ -10,20 +10,23 @@ import { useNavigation } from '@react-navigation/native';
 
 import StoreContext from '../store';
 import { RoundButton, AnimatedInput, Link, Colors } from '../common';
-import { signIn } from '../store/AuthActions';
+import { signIn,LoginInUser } from '../store/AuthActions';
+
+// import { useDispatch } from 'react-redux'
 
 const LoginForm = ({ toggleLogin }) => {
   const { store, dispatch } = useContext(StoreContext);
   const [state, setState] = useState({
-    username: '',
+    email: '',
     password: '',
   });
-
+  // const dispatch = useDispatch();
+  
   const navigation = useNavigation();
   const behaviour = Platform.OS == 'ios' ? 'padding' : 'height';
   const usernameRef = React.createRef();
   const passwordRef = React.createRef();
-  const disableSubmit = !state.username || !state.password;
+  const disableSubmit = !state.email || !state.password;
   const keyboardType =
     Platform.OS === 'ios' ? 'ascii-capable' : 'email-address';
 
@@ -50,14 +53,21 @@ const LoginForm = ({ toggleLogin }) => {
   };
   const loginIn = async () => {
     Keyboard.dismiss();
-    const { username, password } = state;
-    if (username && password) {
-      const user = await signIn(store, dispatch, { email: username, password });
-      console.log(user);
-      if (user) {
-        navigation.navigate('HomeNavigator');
+    // const { username, password } = state;
+    // if (username && password) {
+    //   const user = await signIn(store, dispatch, { email: username, password });
+    //   console.log(user);
+    //   if (user) {
+    //     navigation.navigate('HomeNavigator');
+    //   }
+    // }
+    debugger;
+    dispatch(LoginInUser(state,dispatch)).then((res)=>{
+      if(res.success){
+        alert('successfull');
       }
-    }
+    });    
+
   };
 
   useEffect(() => {
@@ -72,7 +82,7 @@ const LoginForm = ({ toggleLogin }) => {
         placeholder="Username"
         keyboardType={keyboardType}
         onSubmitEditing={focusField('password')}
-        onChangeText={onInputChange('username')}
+        onChangeText={onInputChange('email')}
       />
       <AnimatedInput
         ref={passwordRef}
