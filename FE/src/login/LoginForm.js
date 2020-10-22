@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import StoreContext from '../store';
 import { RoundButton, AnimatedInput, Link, Colors } from '../common';
-import { signIn,LoginInUser } from '../store/AuthActions';
+import { signIn } from '../store/AuthActions';
 
 // import { useDispatch } from 'react-redux'
 
@@ -53,21 +53,16 @@ const LoginForm = ({ toggleLogin }) => {
   };
   const loginIn = async () => {
     Keyboard.dismiss();
-    // const { username, password } = state;
-    // if (username && password) {
-    //   const user = await signIn(store, dispatch, { email: username, password });
-    //   console.log(user);
-    //   if (user) {
-    //     navigation.navigate('HomeNavigator');
-    //   }
-    // }
-    debugger;
-    dispatch(LoginInUser(state,dispatch)).then((res)=>{
-      if(res.success){
-        alert('successfull');
+    const { email, password } = state;
+    console.log('loggin in');
+    if (email && password) {
+      console.log('loggin in 1');
+      const user = await signIn(store, dispatch, { email, password });
+      console.log(user);
+      if (user) {
+        navigation.navigate('HomeNavigator');
       }
-    });    
-
+    }
   };
 
   useEffect(() => {
@@ -79,7 +74,7 @@ const LoginForm = ({ toggleLogin }) => {
       <Text style={styles.signInText}>Sign In</Text>
       <AnimatedInput
         ref={usernameRef}
-        placeholder="Username"
+        placeholder="Email"
         keyboardType={keyboardType}
         onSubmitEditing={focusField('password')}
         onChangeText={onInputChange('email')}

@@ -1,11 +1,17 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, StyleSheet, Alert, Keyboard } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  Keyboard,
+  Platform,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { AnimatedInput, RoundButton, Link, Colors } from '../common';
-import { register,RegisterInUser } from '../store/AuthActions';
+import { register } from '../store/AuthActions';
 import StoreContext from '../store';
-
 
 const RegisterScreen = () => {
   const keyboardType =
@@ -23,10 +29,7 @@ const RegisterScreen = () => {
     phoneNumber: '',
     email: '',
     password: '',
-    location:[
-      21.7833,
-72.22334
-  ]
+    location: [21.7833, 72.22334],
   });
   const onInputChange = (field) => (value) => {
     setState({
@@ -40,9 +43,9 @@ const RegisterScreen = () => {
         case 'firstName':
           firstNameRef.current.focus();
           break;
-          case 'lastName':
-            lastNameRef.current.focus();
-            break;
+        case 'lastName':
+          lastNameRef.current.focus();
+          break;
         case 'phoneNumber':
           phoneNumberRef.current.focus();
           break;
@@ -55,45 +58,26 @@ const RegisterScreen = () => {
       }
     } catch {}
   };
-  // const registerUser = async () => {
-  //   Keyboard.dismiss();
-  //   const success = await register(store, dispatch, { ...state });
-  //   if (success) {
-  //     Alert.alert(
-  //       'Register',
-  //       'User registered Successfully. Please login to use our service.',
-  //       [{ text: 'OK', onPress: () => navigation.navigate('Login') }],
-  //       { cancelable: false }
-  //     );
-  //   }
-  // };
-
-  
   const registerUser = async () => {
     Keyboard.dismiss();
-    // const success = await register(store, dispatch, { ...state });
-    // if (success) {
-    //   Alert.alert(
-    //     'Register',
-    //     'User registered Successfully. Please login to use our service.',
-    //     [{ text: 'OK', onPress: () => navigation.navigate('Login') }],
-    //     { cancelable: false }
-    //   );
-    // }
-
-    dispatch(RegisterInUser(...state)).then((res)=>{
-      if(res.success){
-        alert('successfull');
-      }
-    });
-
-
-
+    const success = await register(store, dispatch, { ...state });
+    console.log(success);
+    if (success) {
+      Alert.alert(
+        'Register',
+        'User registered Successfully. Please login to use our service.',
+        [{ text: 'OK', onPress: () => navigation.navigate('Login') }],
+        { cancelable: false }
+      );
+    }
   };
 
-
   const disableBtn =
-  !state.firstName || !state.lastName || !state.phoneNumber || !state.email || !state.password;
+    !state.firstName ||
+    !state.lastName ||
+    !state.phoneNumber ||
+    !state.email ||
+    !state.password;
   return (
     <View style={styles.container}>
       <Text style={styles.signInText}>Create new account</Text>

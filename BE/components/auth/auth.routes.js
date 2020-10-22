@@ -13,6 +13,7 @@ const validationSchema = {
     lastName: joi.string().required(),
     location: joi.array().required(),
     email: joi.string().email().required(),
+    phoneNumber: joi.string().required(),
     password: joi.string().required(),
   }),
   login: joi.object({

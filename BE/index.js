@@ -1,4 +1,5 @@
 const express = require('express');
+const morgan = require('morgan');
 const config = require('./config');
 const postgraphile = require('./boot/postgraphile');
 
@@ -7,6 +8,7 @@ app.config = config;
 
 require('./boot/express')(app);
 require('./boot/sequelize');
+app.use(morgan('combined'))
 app.use(postgraphile);
 require('./boot/routes')(app);
 

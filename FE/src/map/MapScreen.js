@@ -4,8 +4,7 @@ import MapView, { PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps';
 import MapMarker from './MapMarker';
 import * as Location from 'expo-location';
 
-import StoreContext from '../store';
-import { registerUser, signIn } from '../store/AuthActions';
+import StoreContext from '../service';
 import ViewWithHeader from '../common/Header';
 
 const dummyUser = {
