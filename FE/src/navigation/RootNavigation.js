@@ -14,7 +14,7 @@ const NO_HEADER = () => {
 
 const RootNavigation = () => (
   <>
-    <Stack.Navigator initialRouteName="Login">
+    <Stack.Navigator initialRouteName="Home">
       <Stack.Screen
         name="Login"
         component={LoginScreen}

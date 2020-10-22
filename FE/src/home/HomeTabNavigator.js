@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome } from '@expo/vector-icons';
 
 import HomeScreen from './HomeScreen';
-// import MapScreen from '../map/MapScreen';
+import MapScreen from '../map/MapScreen';
 import { Colors } from '../common';
 {
   /* <FontAwesome name="group" size={24} color="black" /> */
@@ -26,7 +26,7 @@ const screenOptions = ({ route }) => ({
 });
 const tabBarOptions = {
   activeTintColor: Colors.green,
-  inactiveTintColor: Colors.shadowDark,
+inactiveTintColor: Colors.shadowDark,
 };
 
 export default function App() {
@@ -36,7 +36,7 @@ export default function App() {
         name="Groups"
         component={HomeScreen}
       />
-      {/* <Tab.Screen name="Map" component={MapScreen} /> */}
+      <Tab.Screen name="Map" component={MapScreen} />
     </Tab.Navigator>
   );
 }

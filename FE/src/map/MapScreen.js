@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { View, Text, Dimensions, StyleSheet, Image } from 'react-native';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps';
 import MapMarker from './MapMarker';
 import * as Location from 'expo-location';
 
@@ -126,7 +126,7 @@ class MapScreen extends React.Component {
           <MapView
             showsUserLocation
             showsMyLocationButton
-            provider={PROVIDER_GOOGLE}
+            provider={PROVIDER_DEFAULT}
             region={initialRegion}
             style={[styles.mapStyle, mapDimension]}
           >

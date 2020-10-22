@@ -16,22 +16,10 @@
     "assetBundlePatterns": ["**/*"],
     "android": {
       "package": "com.trackmyteam",
-      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png",
-      "config": {
-        "firebase": {
-          "apiKey": "AIzaSyCzrrMm3_4EjmVdq4A9FLk2nDynJfk1KGI",
-          "authDomain": "trackmyteam-282508.firebaseapp.com",
-          "databaseURL": "https://trackmyteam-282508.firebaseio.com",
-          "projectId": "trackmyteam-282508",
-          "storageBucket": "trackmyteam-282508.appspot.com",
-          "messagingSenderId": "589934710592",
-          "appId": "1:589934710592:web:e2d70fb614bf829bc174a5",
-          "measurementId": "G-BX6D8852NM"
-        }
-      }
+      "config": {}
     },
     "ios": {
       "supportsTablet": true
