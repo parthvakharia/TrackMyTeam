@@ -1,60 +1,80 @@
-import React from 'react';
-import {
-  TextInput,
-  StyleSheet,
-  TouchableHighlight,
-  Dimensions,
-} from 'react-native';
-
+import React, { useState, useEffect } from 'react';
+import { View, TextInput, Animated, StyleSheet } from 'react-native';
 import Colors from './Colors';
 
-const AnimatedInput = React.forwardRef(
-  (
-    {
-      wrapperStyle = {},
-      style = {},
-      returnKeyLabel = 'next',
-      returnKeyType = 'next',
-      textContentType = 'none',
-      ...props
-    },
-    ref
-  ) => {
-    return (
-      <TouchableHighlight style={[styles.container, wrapperStyle]}>
+const AnimatedInput = ({ children, label, onFocus, onBlur, ...props }) => {
+  const [animatedInputState, setState] = useState(() => {
+    const animatedIsFocused = new Animated.Value(props.value === '' ? 0 : 1);
+    return {
+      animatedIsFocused,
+      isFocused: false,
+    };
+  });
+  const handleFocus = () => {
+    setState({ ...animatedInputState, isFocused: true });
+    onFocus && onFocus();
+  };
+  const handleBlur = () => {
+    setState({ ...animatedInputState, isFocused: false });
+    onBlur && onBlur();
+  };
+
+  const { animatedIsFocused, isFocused } = animatedInputState;
+  const labelStyle = {
+    position: 'absolute',
+    left: 0,
+    top: animatedIsFocused.interpolate({
+      inputRange: [0, 1],
+      outputRange: [18, 0],
+    }),
+    fontSize: animatedIsFocused.interpolate({
+      inputRange: [0, 1],
+      outputRange: [20, 14],
+    }),
+    color: animatedIsFocused.interpolate({
+      inputRange: [0, 1],
+      outputRange: [Colors.darkGrey, Colors.black],
+    }),
+  };
+
+  useEffect(() => {
+    Animated.timing(animatedIsFocused, {
+      toValue: isFocused || props.value !== '' ? 1 : 0,
+      duration: 200,
+    }).start();
+  });
+
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
+    >
+      <View style={styles.textFieldWrapper}>
+        <Animated.Text style={labelStyle}>{label}</Animated.Text>
         <TextInput
-          ref={ref}
-          autoCapitalize="none"
-          autoCompleteType="off"
-          returnKeyLabel={returnKeyLabel}
-          returnKeyType={returnKeyLabel}
-          placeholderTextColor={Colors.darkGrey}
-          style={[styles.input, style]}
-          textContentType={textContentType}
           {...props}
+          style={styles.textField}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
         />
-      </TouchableHighlight>
-    );
-  }
-);
+      </View>
+      {!!children && children}
+    </View>
+  );
+};
+
+export default AnimatedInput;
+
 const styles = StyleSheet.create({
-  container: {
-    borderColor: Colors.darkGrey,
-    borderWidth: 1,
-    borderRadius: 20,
-    marginBottom: 18,
-    paddingHorizontal: 20,
-    paddingVertical: 5,
-    width: (Dimensions.get('window').width * 80) / 100,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  input: {
-    fontSize: 24,
-    lineHeight: 24,
+  textFieldWrapper: { paddingTop: 20, marginBottom: 18, flexGrow: 1 },
+  textField: {
+    height: 26,
+    fontSize: 20,
     color: Colors.darkGrey,
-    marginBottom: 2,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.darkGrey,
   },
 });
-export default AnimatedInput;

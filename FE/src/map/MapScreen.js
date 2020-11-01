@@ -1,10 +1,10 @@
 import React, { useContext, useEffect } from 'react';
 import { View, Text, Dimensions, StyleSheet, Image } from 'react-native';
-import MapView, { PROVIDER_GOOGLE, PROVIDER_DEFAULT } from 'react-native-maps';
 import MapMarker from './MapMarker';
 import * as Location from 'expo-location';
+import Leaflet from './leaflet';
 
-import StoreContext from '../service';
+import StoreContext from '../store';
 import ViewWithHeader from '../common/Header';
 
 const dummyUser = {
@@ -30,56 +30,53 @@ const dummyUser2 = {
 
 const groupUsersLocations = [
   {
-    latitude: 21.350566,
-    latitudeDelta: 0.0922,
-    longitude: 72.2224965,
-    longitudeDelta: 0.0421,
+    location: [51.5, -0.096],
+    url: 'https://picsum.photos/200',
     name: 'Helloworld',
+    id: 1,
   },
   {
-    latitude: 21.5674566,
-    latitudeDelta: 0.0922,
-    longitude: 72.9124965,
-    longitudeDelta: 0.0421,
+    location: [51.508, -0.11],
+    url: 'https://picsum.photos/200',
     name: 'parth',
+    id: 2,
   },
   {
-    latitude: 21.176405,
-    latitudeDelta: 0.0922,
-    longitude: 72.812434,
-    longitudeDelta: 0.0421,
+    location: [22, -120],
     name: 'vakharia',
+    url: 'https://picsum.photos/200',
+    id: 3,
   },
   {
-    latitude: 21.7954566,
-    latitudeDelta: 0.0922,
-    longitude: 72.3244965,
-    longitudeDelta: 0.0421,
+    location: [23, 44],
     name: 'Neel',
+    url: 'https://picsum.photos/200',
+    id: 4,
   },
 ];
 
 class MapScreen extends React.Component {
   static contextType = StoreContext;
+  leafletRef = React.createRef();
   state = {
     statusBarHeight: 0,
-    initialRegion: {
-      latitude: 0,
-      longitude: 0,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
-    },
+    initialRegion: [0, 0],
     mapDimension: {
       width: '100%',
       height: 100,
     },
+    groupUsersLocations,
   };
 
   componentDidMount() {
     this.getLocation();
     const { store, dispatch } = this.context;
-    // signIn(store, dispatch, dummyUser);
-    setTimeout(() => this.setState({ statusBarHeight: 2 }), 500);
+    // setTimeout(() => this.setState({ statusBarHeight: 2 }), 500);
+    setInterval(() => {
+      const { groupUsersLocations } = this.state;
+      groupUsersLocations[0].location[1] += 0.001;
+      this.setState({ groupUsersLocations });
+    }, 2000);
   }
 
   getLocation = async () => {
@@ -92,47 +89,31 @@ class MapScreen extends React.Component {
       { accuracy: Location.Accuracy.Balanced },
       this.watchLocation
     );
+    let location = await Location.getCurrentPositionAsync();
+    this.watchLocation(location);
   };
 
   watchLocation = ({ coords }) => {
     const { initialRegion } = this.state;
+    console.log('initialRegion', initialRegion);
     this.setState({
-      initialRegion: {
-        ...initialRegion,
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-      },
+      initialRegion: [coords.latitude, coords.longitude],
     });
   };
 
   render() {
     const { initialRegion, statusBarHeight, mapDimension } = this.state;
+    if (this.leafletRef) {
+      // this.leafletRef.injectJavascript('console.log("helloworld")');
+    }
     return (
-      <ViewWithHeader>
-        <View
-          style={[styles.container, { paddingTop: statusBarHeight }]}
-          onLayout={(event) => {
-            var { x, y, width, height } = event.nativeEvent.layout;
-            this.setState({
-              mapDimension: {
-                ...mapDimension,
-                height,
-              },
-            });
-            console.log(x, y, width, height);
-          }}
-        >
-          <MapView
-            showsUserLocation
-            showsMyLocationButton
-            provider={PROVIDER_DEFAULT}
-            region={initialRegion}
-            style={[styles.mapStyle, mapDimension]}
-          >
-            {groupUsersLocations.map((user, index) => (
-              <MapMarker user={user} index={index} />
-            ))}
-          </MapView>
+      <ViewWithHeader header={false}>
+        <View style={[styles.container, { paddingTop: statusBarHeight }]}>
+          <Leaflet
+            ref={(ref) => (this.leafletRef = ref)}
+            mapMarkers={groupUsersLocations}
+            currentPosition={initialRegion}
+          />
         </View>
       </ViewWithHeader>
     );

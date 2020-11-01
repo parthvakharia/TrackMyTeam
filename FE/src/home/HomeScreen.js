@@ -1,16 +1,26 @@
 import React, { useEffect } from 'react';
-import { View, Text } from 'react-native';
-import ViewWithHeader from '../common/Header';
+import { View, Text, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const HomeScreen = (params) => {
+import ViewWithHeader, { MenuBtn } from '../common/Header';
+import MapScreen from '../map';
+
+const HomeScreen = () => {
   const navigation = useNavigation();
-  useEffect(() => navigation.setParams({ title: 'Helloworld' }), false);
+  const gotoAddFroup = () => {
+    navigation.navigate('Group');
+  };
+
   return (
-    <ViewWithHeader>
-      <View>
-        <Text>Home 1</Text>
-      </View>
+    <ViewWithHeader
+      leftBtn={MenuBtn}
+      rightBtnProps={{
+        title: 'Groups',
+        icon: Platform.OS === 'ios' ? 'ios-add' : 'md-add',
+        onPress: gotoAddFroup,
+      }}
+    >
+      <MapScreen />
     </ViewWithHeader>
   );
 };

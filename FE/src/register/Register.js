@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import { AnimatedInput, RoundButton, Link, Colors } from '../common';
+import { RoundInput, RoundButton, Link, Colors } from '../common';
 import { register } from '../store/AuthActions';
 import StoreContext from '../store';
 
@@ -81,35 +81,28 @@ const RegisterScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.signInText}>Create new account</Text>
-      <AnimatedInput
-        ref={firstNameRef}
-        placeholder="firstName"
-        keyboardType={keyboardType}
-        onSubmitEditing={focusField('lastName')}
-        onChangeText={onInputChange('firstName')}
-      />
-      <AnimatedInput
-        ref={lastNameRef}
-        placeholder="lastName"
+      <RoundInput
+        ref={usernameRef}
+        placeholder="Username"
         keyboardType={keyboardType}
         onSubmitEditing={focusField('phoneNumber')}
         onChangeText={onInputChange('lastName')}
       />
-      <AnimatedInput
+      <RoundInput
         ref={phoneNumberRef}
         placeholder="Phone Number"
         keyboardType={'phone-pad'}
         onSubmitEditing={focusField('email')}
         onChangeText={onInputChange('phoneNumber')}
       />
-      <AnimatedInput
+      <RoundInput
         ref={emailRef}
         placeholder="E-mail Address"
         keyboardType={keyboardType}
         onSubmitEditing={focusField('password')}
         onChangeText={onInputChange('email')}
       />
-      <AnimatedInput
+      <RoundInput
         ref={passwordRef}
         secureTextEntry
         wrapperStyle={styles.mb31}

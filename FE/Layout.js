@@ -9,7 +9,7 @@ import StoreContext from './src/store';
 import RootNavigation from './src/navigation';
 import { Colors, Loading, ErrorModal } from './src/common';
 import { useQuery } from '@apollo/client';
-import { GET_USERS } from './src/store/basic/gql';
+import { GET_USERS } from './src/store/gql';
 import './Setup';
 
 const Layout = () => {
@@ -18,7 +18,7 @@ const Layout = () => {
     dispatch,
   } = useContext(StoreContext);
   const { loading, error: error1, data } = useQuery(GET_USERS);
-  console.log(loading, data,error1);
+  console.log(loading, data, error1);
   return (
     <>
       <StatusBar style="auto" />

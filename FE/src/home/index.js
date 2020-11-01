@@ -1,2 +1,2 @@
-import HomeNavigator from '../navigation/DrawerNavigator';
-export default HomeNavigator;
+import HomeScreen from './HomeScreen';
+export default HomeScreen;

@@ -1,15 +1,15 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { View, Text } from 'react-native';
 
-import HomeTabNavigator from '../home/HomeTabNavigator';
-import { View, Text } from 'react-native-animatable';
+import HomeScreen from '../home/HomeScreen';
 
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => {
   return (
     <Drawer.Navigator>
-      <Drawer.Screen name="Home" component={HomeTabNavigator} />
+      <Drawer.Screen name="Home" component={HomeScreen} />
       <Drawer.Screen
         name="Profile"
         component={() => (

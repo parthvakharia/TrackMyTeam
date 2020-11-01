@@ -9,7 +9,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 
 import StoreContext from '../store';
-import { RoundButton, AnimatedInput, Link, Colors } from '../common';
+import { RoundButton, RoundInput, Link, Colors } from '../common';
 import { signIn } from '../store/AuthActions';
 
 // import { useDispatch } from 'react-redux'
@@ -72,14 +72,14 @@ const LoginForm = ({ toggleLogin }) => {
   return (
     <KeyboardAvoidingView style={styles.loginContainer} behavior={behaviour}>
       <Text style={styles.signInText}>Sign In</Text>
-      <AnimatedInput
+      <RoundInput
         ref={usernameRef}
         placeholder="Email"
         keyboardType={keyboardType}
         onSubmitEditing={focusField('password')}
         onChangeText={onInputChange('email')}
       />
-      <AnimatedInput
+      <RoundInput
         ref={passwordRef}
         secureTextEntry
         wrapperStyle={styles.mb31}

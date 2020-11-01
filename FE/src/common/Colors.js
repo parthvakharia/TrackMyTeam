@@ -7,5 +7,6 @@ const Colors = {
   blue: '#007AFF',
   shadowLight: 'rgba(255,255,255,0.75)',
   shadowDark: 'rgba(0,0,0,0.4)',
+  transparent: 'rgba(0,0,0,0)',
 };
 export default Colors;

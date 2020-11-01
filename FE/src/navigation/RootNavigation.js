@@ -5,35 +5,42 @@ import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import LoginScreen from '../login';
 import DrawerNavigator from './DrawerNavigator';
 import RegisterScreen from '../register';
+import AddGroupScreen from '../group';
 
 const Stack = createStackNavigator();
 
-const NO_HEADER = () => {
-  return null;
+const noHeader = {
+  header: () => null,
 };
 
 const RootNavigation = () => (
   <>
-    <Stack.Navigator initialRouteName="Login">
+    <Stack.Navigator initialRouteName="Home">
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{
-          header: NO_HEADER,
-        }}
+        options={{ ...noHeader }}
       />
       <Stack.Screen
         name="Register"
         component={RegisterScreen}
         options={{
-          header: NO_HEADER,
+          ...noHeader,
         }}
       />
       <Stack.Screen
         name="Home"
         component={DrawerNavigator}
         options={{
-          header: NO_HEADER,
+          ...noHeader,
+        }}
+      />
+      <Stack.Screen
+        name="Group"
+        component={AddGroupScreen}
+        options={{
+          ...noHeader,
+          gestureDirection: 'horizontal',
         }}
       />
     </Stack.Navigator>
