@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import { View, Text, Dimensions, StyleSheet, Image } from 'react-native';
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 
 const outerCircleRadius = 34;
 const imageRadius = 28;

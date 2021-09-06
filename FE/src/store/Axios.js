@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { API_URL } from '@env';
+// import { API_URL } from '@env';
+const API_URL = 'http://192.168.0.110:4040';
 console.log(API_URL);
 const Axios = axios.create({
   baseURL: API_URL,
@@ -7,7 +8,6 @@ const Axios = axios.create({
   //   headers: { 'X-Custom-Header': '' },
 });
 Axios.interceptors.request.use((req) => {
-  console.log(`${req.method} ${req.url}`);
   req.headers.authorization = 'Barrier my secret token';
   // Important: request interceptors **must** return the request.
   return req;

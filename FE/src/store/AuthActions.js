@@ -1,4 +1,5 @@
 import { SET_USER, IS_LOADING, GLOBAL_ERROR } from './ActionTypes';
+import * as SecureStore from 'expo-secure-store';
 import axios from './Axios';
 const BASE_URL = '/auth';
 
@@ -6,28 +7,21 @@ export const signIn = async (store, dispatch, payload) => {
   try {
     dispatch({ type: IS_LOADING, payload: true });
     const {
-      message: { token },
+      message: { token, user },
     } = await axios.post(`${BASE_URL}/login`, payload);
 
-    // save token in async storage from here.
-    // use that token for subsequent request from Axios.js.
+    await SecureStore.setItemAsync('token', token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
 
-    const user = await axios.post(`${BASE_URL}/logged-in-user`);
     const actions = [
       { type: SET_USER, payload: user },
       { type: IS_LOADING, payload: false },
     ];
-
-    actions.map(dispatch);
-    return user;
   } catch (e) {
     const actions = [
       { type: IS_LOADING, payload: false },
       { type: GLOBAL_ERROR, payload: e },
     ];
     actions.map(dispatch);
-    console.log(e);
-    return false;
   }
 };
 
@@ -38,13 +32,11 @@ export const register = async (store, dispatch, payload) => {
     await axios.post(`${BASE_URL}/register`, payload);
 
     dispatch({ type: IS_LOADING, payload: false });
-    return true;
   } catch (e) {
     const actions = [
       { type: IS_LOADING, payload: false },
       { type: GLOBAL_ERROR, payload: e },
     ];
     actions.map(dispatch);
-    return false;
   }
 };

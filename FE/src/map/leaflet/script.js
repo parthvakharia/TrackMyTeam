@@ -112,6 +112,10 @@ const mapFunctions = `
         .bindPopup("<strong style='color: #84b819'>"+data.name+"</strong><br>This is demo popup use to deal with feature features.");
         marker.id = data.id;
     }
+
+    var setView = function (lat, long, zoom) {
+        leaflet.setView([lat, long], zoom);
+    }
 </script>
 `;
 

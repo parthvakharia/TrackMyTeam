@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useReducer, useContext } from 'react';
 import reducer from './Reducer';
 
 const initialState = {
@@ -9,15 +9,21 @@ const initialState = {
 };
 
 const StoreContext = createContext();
-const { Provider, Consumer } = StoreContext;
+const { Provider } = StoreContext;
+
 const StoreProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  // const Dispatch = (type, payload) => {
-  //   dispatch({ type, payload });
-  // };
 
   return <Provider value={{ store: state, dispatch }}>{children}</Provider>;
 };
 
-export default StoreContext;
-export { StoreProvider, Provider, Consumer };
+export const useStoreContext = () => {
+  const storeContext = useContext(StoreContext);
+  if (!storeContext)
+    throw new Error('Store Context can only be called inside store context provider');
+
+  return storeContext;
+}
+
+export default StoreProvider;
+

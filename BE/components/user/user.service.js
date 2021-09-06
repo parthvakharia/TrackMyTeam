@@ -31,15 +31,19 @@ exports.login = async (email, password) => {
     },
   });
 
-  if(!user) {
+  if (!user)
     throw new Error(`No user found with email ${email}`);
-  }
 
-  if(user.comparePassword(password)) {
-    return JWT.generateToken({
-        userId: user.id,
-        isVerified: user.isVerified
-    });
-  }
-  throw new Error(`Incorrect password`);
+  if (!user.comparePassword(password))
+    throw new Error(`Incorrect password`);
+
+  const token = JWT.generateToken({
+    userId: user.id,
+    isVerified: user.isVerified
+  })
+
+  return {
+    ...token,
+    user: user.safeObject()
+  };
 };

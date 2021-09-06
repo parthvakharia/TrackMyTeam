@@ -8,6 +8,7 @@ exports.responseHandler = (req, res, next) => {
 
   res.errorHandler = (err, statusCode = 500) => {
     const message = typeof err === 'string' ? err : err.message;
+    console.log(err);
     return res.status(statusCode).json({
       status: 'error',
       message,

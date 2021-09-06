@@ -19,27 +19,25 @@ const RootNavigation = () => (
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{ ...noHeader }}
+        options={{  }}
       />
       <Stack.Screen
         name="Register"
         component={RegisterScreen}
         options={{
-          ...noHeader,
         }}
       />
       <Stack.Screen
         name="Home"
         component={DrawerNavigator}
         options={{
-          ...noHeader,
+          ...noHeader
         }}
       />
       <Stack.Screen
         name="Group"
         component={AddGroupScreen}
         options={{
-          ...noHeader,
           gestureDirection: 'horizontal',
         }}
       />

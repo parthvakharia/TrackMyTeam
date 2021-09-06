@@ -8,24 +8,22 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import StoreContext from '../store';
+import { useStoreContext } from '../store';
 import { RoundButton, RoundInput, Link, Colors } from '../common';
 import { signIn } from '../store/AuthActions';
 
 // import { useDispatch } from 'react-redux'
 
 const LoginForm = ({ toggleLogin }) => {
-  const { store, dispatch } = useContext(StoreContext);
-  const [state, setState] = useState({
-    email: '',
-    password: '',
-  });
-  // const dispatch = useDispatch();
-  
+  const storeContext = useStoreContext();
   const navigation = useNavigation();
   const behaviour = Platform.OS == 'ios' ? 'padding' : 'height';
   const usernameRef = React.createRef();
   const passwordRef = React.createRef();
+  const [state, setState] = useState({
+    email: '',
+    password: '',
+  });
   const disableSubmit = !state.email || !state.password;
   const keyboardType =
     Platform.OS === 'ios' ? 'ascii-capable' : 'email-address';
@@ -33,12 +31,14 @@ const LoginForm = ({ toggleLogin }) => {
   const toggleLoginPage = () => {
     return toggleLogin(false);
   };
+
   const onInputChange = (field) => (value) => {
     setState({
       ...state,
       [field]: value,
     });
   };
+
   const focusField = (fieldName) => () => {
     try {
       switch (fieldName) {
@@ -49,19 +49,18 @@ const LoginForm = ({ toggleLogin }) => {
           passwordRef.current.focus();
           break;
       }
-    } catch {}
+    } catch { }
   };
+
   const loginIn = async () => {
     Keyboard.dismiss();
     const { email, password } = state;
-    console.log('loggin in');
+
     if (email && password) {
-      console.log('loggin in 1');
-      const user = await signIn(store, dispatch, { email, password });
-      console.log(user);
-      if (user) {
-        navigation.navigate('HomeNavigator');
-      }
+      const user = await signIn(storeContext.store, storeContext.dispatch, { email, password });
+
+      if (user)
+        navigation.navigate('Home');
     }
   };
 

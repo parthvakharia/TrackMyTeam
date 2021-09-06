@@ -15,7 +15,10 @@ const postgraphileOptions = {
     graphiqlRoute: '/graphiql',
     showErrorStack: 'json',
     extendedErrors: ['hint', 'detail', 'errcode'],
-    appendPlugins: [require('@graphile-contrib/pg-simplify-inflector')],
+    appendPlugins: [
+      require('@graphile-contrib/pg-simplify-inflector'),
+      require("postgraphile-plugin-connection-filter")
+    ],
     exportGqlSchemaPath: 'schema.graphql',
     graphiql: true,
     enhanceGraphiql: true,
@@ -38,7 +41,10 @@ const postgraphileOptions = {
     ignoreIndexes: false,
     graphqlRoute: '/graphql',
     extendedErrors: ['errcode'],
-    appendPlugins: [require('@graphile-contrib/pg-simplify-inflector')],
+    appendPlugins: [
+      require('@graphile-contrib/pg-simplify-inflector'),
+      require('postgraphile-plugin-connection-filter')
+    ],
     graphiql: false,
     enableQueryBatching: true,
     disableQueryLog: true, // our default logging has performance issues, but do make sure you have a logging system in place!

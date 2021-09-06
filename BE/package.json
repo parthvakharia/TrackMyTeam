@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": "cross-env ENV=dev nodemon index.js"
+    "start:dev": "cross-env ENV=dev nodemon index.js",
+    "db:migrate": "npx sequelize-cli db:migrate"
   },
   "author": "",
   "license": "ISC",
@@ -27,6 +28,7 @@
     "pg": "^8.3.3",
     "pg-hstore": "^2.3.3",
     "postgraphile": "^4.8.0",
+    "postgraphile-plugin-connection-filter": "^2.2.2",
     "sequelize": "^6.3.5"
   },
   "devDependencies": {

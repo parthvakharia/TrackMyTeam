@@ -13,9 +13,10 @@ exports.registerUser = async (req, res, next) => {
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const token = await UserService.login(email, password);
+    const { token, user } = await UserService.login(email, password);
     return res.successHandler({
       token,
+      user
     });
   } catch (error) {
     return res.errorHandler(error);

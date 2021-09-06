@@ -1,10 +1,10 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, Dimensions, StyleSheet, Image } from 'react-native';
 import MapMarker from './MapMarker';
 import * as Location from 'expo-location';
 import Leaflet from './leaflet';
 
-import StoreContext from '../store';
+import { useStoreContext } from '../store';
 import ViewWithHeader from '../common/Header';
 
 const dummyUser = {
@@ -55,69 +55,66 @@ const groupUsersLocations = [
   },
 ];
 
-class MapScreen extends React.Component {
-  static contextType = StoreContext;
-  leafletRef = React.createRef();
-  state = {
+const MapScreen = () => {
+  const leafletRef = useRef();
+  const { store, dispatch } = useStoreContext();
+  const [initialRegion, setInitialRegion] = useState([1, 1]);
+  const [state, setMapScreenState] = useState({
     statusBarHeight: 0,
-    initialRegion: [0, 0],
     mapDimension: {
       width: '100%',
       height: 100,
     },
     groupUsersLocations,
-  };
+  });
+  setInterval(() => {
+    const { groupUsersLocations } = state;
+    groupUsersLocations[0].location[1] += 0.001;
+    setState({ groupUsersLocations });
+  }, 2000);
 
-  componentDidMount() {
-    this.getLocation();
-    const { store, dispatch } = this.context;
-    // setTimeout(() => this.setState({ statusBarHeight: 2 }), 500);
-    setInterval(() => {
-      const { groupUsersLocations } = this.state;
-      groupUsersLocations[0].location[1] += 0.001;
-      this.setState({ groupUsersLocations });
-    }, 2000);
+  const setState = (newObject) => {
+    setMapScreenState({
+      ...state,
+      ...newObject
+    })
   }
 
-  getLocation = async () => {
-    let { status } = await Location.requestPermissionsAsync();
+  useEffect(() => {
+    getLocation();
+  }, [])
+
+  const getLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
       setErrorMsg('Permission to access location was denied');
       return;
     }
+    let location = await Location.getCurrentPositionAsync();
+    watchLocation(location);
+
     Location.watchPositionAsync(
       { accuracy: Location.Accuracy.Balanced },
-      this.watchLocation
+      watchLocation
     );
-    let location = await Location.getCurrentPositionAsync();
-    this.watchLocation(location);
   };
 
-  watchLocation = ({ coords }) => {
-    const { initialRegion } = this.state;
-    console.log('initialRegion', initialRegion);
-    this.setState({
-      initialRegion: [coords.latitude, coords.longitude],
-    });
+  const watchLocation = ({ coords }) => {
+    setInitialRegion([coords.latitude, coords.longitude]);
   };
 
-  render() {
-    const { initialRegion, statusBarHeight, mapDimension } = this.state;
-    if (this.leafletRef) {
-      // this.leafletRef.injectJavascript('console.log("helloworld")');
-    }
-    return (
-      <ViewWithHeader header={false}>
-        <View style={[styles.container, { paddingTop: statusBarHeight }]}>
-          <Leaflet
-            ref={(ref) => (this.leafletRef = ref)}
-            mapMarkers={groupUsersLocations}
-            currentPosition={initialRegion}
-          />
-        </View>
-      </ViewWithHeader>
-    );
-  }
+  const { statusBarHeight, mapDimension } = state;
+  return (
+    <ViewWithHeader header={false}>
+      <View style={[styles.container, { paddingTop: statusBarHeight }]}>
+        <Leaflet
+          leafletRef={(ref) => (leafletRef = ref)}
+          mapMarkers={groupUsersLocations}
+          currentPosition={initialRegion}
+        />
+      </View>
+    </ViewWithHeader>
+  )
 }
 
 const styles = StyleSheet.create({

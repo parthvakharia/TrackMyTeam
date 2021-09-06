@@ -41,6 +41,7 @@ const AnimatedInput = ({ children, label, onFocus, onBlur, ...props }) => {
     Animated.timing(animatedIsFocused, {
       toValue: isFocused || props.value !== '' ? 1 : 0,
       duration: 200,
+      useNativeDriver: false
     }).start();
   });
 

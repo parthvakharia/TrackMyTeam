@@ -1,10 +1,10 @@
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import React from 'react';
 import 'react-native-gesture-handler';
-import { API_URL } from '@env';
-import { StoreProvider } from './src/store';
+// import { API_URL } from '@env';
+import StoreProvider from './src/store';
 import Layout from './Layout';
-
+const API_URL = "http://192.168.0.110:4040";
 const client = new ApolloClient({
   uri: `${API_URL}/graphql`,
   cache: new InMemoryCache(),

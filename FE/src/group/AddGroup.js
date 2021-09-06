@@ -2,27 +2,109 @@ import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
-  Platform,
-  TouchableHighlight,
-  StyleSheet,
-  Modal,
+  FlatList
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-
+import { useMutation } from '@apollo/client';
+import { SEARCH_USERS, CREATE_GROUP, CREATE_GROUP_MEMBER } from '../store/gql';
 import ViewWithHeader, { MenuBtn } from '../common/Header';
 import { Colors, AnimatedInput } from '../common';
+import { useDebounce, useDebouncedCallback } from 'use-debounce';
+import { Button } from 'react-native-elements'
+import SearchUsersList from './SearchUsersList';
+import GroupMemberList from './GroupMemberList';
+
+const LOGGED_IN_USER_ID = 1;
 
 const AddGroupScreen = (params) => {
+  const navigation = useNavigation();
   const [state, setState] = useState({
     name: '',
     description: '',
+    addedGroupMembers: [{ firstName: 'helloworld', id: 1 }],
     searchText: '',
+    isSearchFieldFocused: false
   });
-  const navigation = useNavigation();
-  const searchUser = () => {};
-  const onInputChange = (field) => (value) =>
-    setState({ ...state, [field]: value });
+  const [debouncedSearchText] = useDebounce(state.searchText, 1000);
+  const [createGroup, { data: { createGroup: createdGroup } = {} }] = useMutation(CREATE_GROUP);
+  const [createGroupMember] = useMutation(CREATE_GROUP_MEMBER);
+  const onInputChange = (field) => (value) => setState({ ...state, [field]: value });
+
+  useEffect(() => {
+    const createdGroupId = createdGroup?.group?.id || -1;
+
+    if (createdGroupId > -1) {
+      let date = new Date();
+      date = date.toISOString();
+      state.addedGroupMembers.map((member) => {
+        createGroupMember({
+          variables: {
+            groupMember: {
+              groupId: createdGroupId,
+              userId: member.id,
+              createdAt: date,
+              updatedAt: date
+            }
+          }
+        });
+      });
+    }
+  }, [createdGroup])
+
+  const changeSearchFieldFocus = useDebouncedCallback((focus) =>
+    setState({
+      ...state,
+      isSearchFieldFocused: focus
+    }),
+    200
+  )
+
+  const onUserSelect = (user) => {
+    const { addedGroupMembers } = state;
+    const isUserAlreadyMember = addedGroupMembers.find((member) => member.id === user.id);
+
+    if (!isUserAlreadyMember) {
+      addedGroupMembers.push(user)
+      setState({
+        ...state,
+        addedGroupMembers
+      })
+    }
+  }
+
+  const onDeleteGroupMember = (member) => {
+    const { addedGroupMembers } = state;
+    const memberIndex = addedGroupMembers.findIndex((user) => member.id === user.id);
+
+    if (memberIndex > -1) {
+      addedGroupMembers.splice(memberIndex, 1)
+      setState({
+        ...state,
+        addedGroupMembers
+      })
+    }
+  }
+
+  const createGroupHandler = () => {
+    const { name, description } = state;
+    if (!name) return;
+
+    let date = new Date();
+    date = date.toISOString();
+    const groupInput = {
+      name,
+      description,
+      ownerId: LOGGED_IN_USER_ID,
+      createdAt: date,
+      updatedAt: date
+    }
+    createGroup({
+      variables: {
+        group: groupInput
+      }
+    });
+  }
 
   return (
     <ViewWithHeader title="Create Group">
@@ -44,33 +126,24 @@ const AddGroupScreen = (params) => {
           value={state.description}
           onChangeText={onInputChange('description')}
         />
-        <View>
-          <Text>Group Members</Text>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <AnimatedInput
-            label="Email/Phonenumber"
-            value={state.searchText}
-            onChangeText={onInputChange('searchText')}
-          >
-            <TouchableHighlight
-              onPress={searchUser}
-              activeOpacity={0.6}
-              underlayColor={Colors.transparent}
-              style={{ marginLeft: 8 }}
-            >
-              <View>
-                <Text style={{ color: Colors.green }}>Search</Text>
-              </View>
-            </TouchableHighlight>
-          </AnimatedInput>
-        </View>
+        <AnimatedInput
+          label="Search users by Email/Phonenumber"
+          value={state.searchText}
+          onChangeText={onInputChange('searchText')}
+          onFocus={() => changeSearchFieldFocus(true)}
+          onBlur={() => changeSearchFieldFocus(false)}
+        />
+        {
+          state.isSearchFieldFocused &&
+          <SearchUsersList
+            state={state}
+            setState={setState}
+            searchText={debouncedSearchText}
+            onUserSelect={onUserSelect}
+          />
+        }
+        <GroupMemberList users={state.addedGroupMembers} onDelete={onDeleteGroupMember} />
+        {/* <Button onPress={createGroupHandler} title="Create Group" icon={<Ionicons name="add-outline" />}></Button> */}
       </View>
     </ViewWithHeader>
   );

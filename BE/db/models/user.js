@@ -1,6 +1,13 @@
 'use strict';
 const { Model } = require('sequelize');
 const bcrypt = require('bcrypt');
+const SAFE_OBJECT_KEYS = [
+  'firstName',
+  'lastName',
+  'email',
+  'location',
+  'isVerified',
+]
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -18,6 +25,12 @@ module.exports = (sequelize, DataTypes) => {
     }
     comparePassword(password) {
       return bcrypt.compareSync(password, this.password);
+    }
+    safeObject() {
+      return SAFE_OBJECT_KEYS.reduce((user, safeKey) => {
+        user[safeKey] = this[safeKey];
+        return user;
+      }, {});
     }
   }
 

@@ -82,8 +82,15 @@ const RegisterScreen = () => {
     <View style={styles.container}>
       <Text style={styles.signInText}>Create new account</Text>
       <RoundInput
-        ref={usernameRef}
-        placeholder="Username"
+        ref={firstNameRef}
+        placeholder="First Name"
+        keyboardType={keyboardType}
+        onSubmitEditing={focusField('lastName')}
+        onChangeText={onInputChange('firstName')}
+      />
+      <RoundInput
+        ref={firstNameRef}
+        placeholder="Last Name"
         keyboardType={keyboardType}
         onSubmitEditing={focusField('phoneNumber')}
         onChangeText={onInputChange('lastName')}
@@ -113,7 +120,7 @@ const RegisterScreen = () => {
         textContentType="password"
         onChangeText={onInputChange('password')}
       />
-      <RoundButton title="Sign Up" onPress={registerUser} color="green" />
+      <RoundButton title="Sign Up" onPress={registerUser} color="green" disableBtn={disableBtn} />
       <Link
         title=" Already register ? Go to Login."
         onPress={navigation.goBack}

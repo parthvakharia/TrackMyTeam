@@ -1,32 +1,50 @@
-import React, { Component, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Dimensions } from 'react-native';
 import { WebView } from 'react-native-webview';
 import script from './script';
 const MAP_VAR = 'leaflet';
 
-class Leaflet extends Component {
-  leafletRef = React.createRef();
-  html = '';
-  constructor(props) {
-    super(props);
-    this.state = {
-      mapDimension: {
-        height: 0,
-        width: Dimensions.get('window').width - 0,
-      },
-      drawnMarkers: [],
-    };
-    const [latitude, longitude] = this.props.currentPosition;
-    this.html = script;
-    this.html = this.html.replace('$lat', latitude);
-    this.html = this.html.replace('$lng', longitude);
+const Leaflet = ({ mapMarkers, currentPosition }) => {
+  const leafletRef = useRef();
+  const [state, setLeafLetState] = useState({
+    mapDimension: {
+      height: 0,
+      width: Dimensions.get('window').width - 0,
+    },
+    zoom: 13,
+    drawnMarkers: [],
+    html: ''
+  });
+
+  useEffect(() => {
+    const [latitude, longitude] = currentPosition;
+    let html = script;
+    html = html.replace('$lat', latitude);
+    html = html.replace('$lng', longitude);
+    setState({ html });
+  }, []);
+
+  useEffect(() => {
+    const [latitude, longitude] = currentPosition;
+    console.log('in leaflet location', currentPosition);
+    // leafletRef.current.injectJavaScript(`setView(${latitude},${longitude},${state.zoom});`);
+    let html = script;
+    html = html.replace('$lat', latitude);
+    html = html.replace('$lng', longitude);
+    setState({ html });
+  }, [currentPosition]);
+
+  useEffect(() => {
+    drawMarkers(mapMarkers)
+  }, [mapMarkers])
+
+  const setState = (newObject) => {
+    setLeafLetState({ ...state, ...newObject });
   }
 
-  componentDidMount() {}
-
-  findDimensions({ height }) {
-    const { mapDimension } = this.state;
-    this.setState({
+  const findDimensions = ({ height }) => {
+    const { mapDimension } = state;
+    setState({
       mapDimension: {
         ...mapDimension,
         height,
@@ -34,49 +52,46 @@ class Leaflet extends Component {
     });
   }
 
-  drawMarkers = (markers) => {
-    // && this.state.drawnMarkers != markers
-    if (this.leafletRef.current) {
+  const drawMarkers = (markers) => {
+    if (leafletRef.current) {
       markers.map((marker) => {
-        // check for actual value change
         var data = JSON.stringify(marker);
-        this.leafletRef.current.injectJavaScript(`createMarker('${data}');`);
+        leafletRef.current.injectJavaScript(`createMarker('${data}');`);
       });
-      if (this.state.drawnMarkers != markers) {
-        this.setState({
+      if (state.drawnMarkers != markers) {
+        setState({
           drawnMarkers: markers,
         });
       }
     }
-  };
-
-  componentDidUpdate(nextProps) {
-    if (nextProps.mapMarkers) {
-      this.drawMarkers(nextProps.mapMarkers);
-    }
   }
 
-  render() {
-    const { height, width } = this.state.mapDimension;
-    this.drawMarkers(this.props.mapMarkers);
-    return (
-      <View
-        style={{ flex: 1 }}
-        onLayout={(event) => {
-          this.findDimensions(event.nativeEvent.layout);
+
+  const { html, mapDimension: { height, width } } = state;
+  return (
+    <View
+      style={{ flex: 1 }}
+      onLayout={(event) => {
+        findDimensions(event.nativeEvent.layout);
+      }}
+    >
+      <WebView
+        ref={leafletRef}
+        // injectedJavaScriptBeforeContentLoaded={`
+        //   window.onerror = function(message, sourcefile, lineno, colno, error) {
+        //     alert(message, sourcefile, lineno, colno, error);
+        //     return true;
+        //   };
+        //   true;
+        // `}
+        style={{ flex: 1, height, width }}
+        source={{ html }}
+        onError={(e) => {
+          console.log(e);
         }}
-      >
-        <WebView
-          ref={this.leafletRef}
-          style={{ flex: 1, height, width }}
-          source={{ html: this.html }}
-          onError={(e) => {
-            console.log(e);
-          }}
-        ></WebView>
-      </View>
-    );
-  }
+      ></WebView>
+    </View>
+  );
 }
 
 export default Leaflet;
