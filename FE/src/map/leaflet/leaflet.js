@@ -6,14 +6,13 @@ const MAP_VAR = 'leaflet';
 
 const Leaflet = ({ mapMarkers, currentPosition }) => {
   const leafletRef = useRef();
+  const zoomLevel = 13;
+  const [leafletHTML, setLeafletHTML] = useState('');
   const [state, setLeafLetState] = useState({
     mapDimension: {
       height: 0,
       width: Dimensions.get('window').width - 0,
     },
-    zoom: 13,
-    drawnMarkers: [],
-    html: ''
   });
 
   useEffect(() => {
@@ -21,26 +20,25 @@ const Leaflet = ({ mapMarkers, currentPosition }) => {
     let html = script;
     html = html.replace('$lat', latitude);
     html = html.replace('$lng', longitude);
-    setState({ html });
+    setLeafletHTML(html);
   }, []);
 
   useEffect(() => {
+    if (!leafletHTML) return;
+
     const [latitude, longitude] = currentPosition;
-    console.log('in leaflet location', currentPosition);
-    // leafletRef.current.injectJavaScript(`setView(${latitude},${longitude},${state.zoom});`);
-    let html = script;
-    html = html.replace('$lat', latitude);
-    html = html.replace('$lng', longitude);
-    setState({ html });
-  }, [currentPosition]);
+    leafletRef.current.injectJavaScript(
+      `setView(${latitude},${longitude},${zoomLevel});`
+    );
+  }, [leafletHTML, currentPosition]);
 
   useEffect(() => {
-    drawMarkers(mapMarkers)
-  }, [mapMarkers])
+    drawMarkers(mapMarkers);
+  }, [mapMarkers]);
 
   const setState = (newObject) => {
     setLeafLetState({ ...state, ...newObject });
-  }
+  };
 
   const findDimensions = ({ height }) => {
     const { mapDimension } = state;
@@ -50,7 +48,7 @@ const Leaflet = ({ mapMarkers, currentPosition }) => {
         height,
       },
     });
-  }
+  };
 
   const drawMarkers = (markers) => {
     if (leafletRef.current) {
@@ -58,16 +56,13 @@ const Leaflet = ({ mapMarkers, currentPosition }) => {
         var data = JSON.stringify(marker);
         leafletRef.current.injectJavaScript(`createMarker('${data}');`);
       });
-      if (state.drawnMarkers != markers) {
-        setState({
-          drawnMarkers: markers,
-        });
-      }
     }
-  }
+  };
 
-
-  const { html, mapDimension: { height, width } } = state;
+  const {
+    html,
+    mapDimension: { height, width },
+  } = state;
   return (
     <View
       style={{ flex: 1 }}
@@ -85,13 +80,13 @@ const Leaflet = ({ mapMarkers, currentPosition }) => {
         //   true;
         // `}
         style={{ flex: 1, height, width }}
-        source={{ html }}
+        source={{ html: leafletHTML }}
         onError={(e) => {
           console.log(e);
         }}
       ></WebView>
     </View>
   );
-}
+};
 
 export default Leaflet;
