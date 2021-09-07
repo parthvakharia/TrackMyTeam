@@ -1,2 +1,2 @@
-import Leaflet from './leaflet';
+import Leaflet from './Leaflet';
 export default Leaflet;

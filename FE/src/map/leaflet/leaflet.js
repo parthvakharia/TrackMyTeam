@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Dimensions } from 'react-native';
 import { WebView } from 'react-native-webview';
-import script from './script';
+import script from './Scripts';
 const MAP_VAR = 'leaflet';
 
 const Leaflet = ({ mapMarkers, currentPosition }) => {
