@@ -4,7 +4,6 @@ import MapMarker from './MapMarker';
 import * as Location from 'expo-location';
 import Leaflet from './leaflet';
 
-import { useStoreContext } from '../store';
 import ViewWithHeader from '../common/Header';
 
 const dummyUser = {
@@ -57,7 +56,6 @@ const groupUsersLocations = [
 
 const MapScreen = () => {
   const leafletRef = useRef();
-  const { store, dispatch } = useStoreContext();
   const [initialRegion, setInitialRegion] = useState([1, 1]);
   const [state, setMapScreenState] = useState({
     statusBarHeight: 0,
@@ -67,18 +65,6 @@ const MapScreen = () => {
     },
     groupUsersLocations,
   });
-  setInterval(() => {
-    const { groupUsersLocations } = state;
-    groupUsersLocations[0].location[1] += 0.001;
-    setState({ groupUsersLocations });
-  }, 2000);
-
-  const setState = (newObject) => {
-    setMapScreenState({
-      ...state,
-      ...newObject
-    })
-  }
 
   useEffect(() => {
     getLocation();

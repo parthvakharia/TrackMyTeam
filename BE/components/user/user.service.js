@@ -43,7 +43,17 @@ exports.login = async (email, password) => {
   })
 
   return {
-    ...token,
+    token,
     user: user.safeObject()
   };
 };
+
+exports.getUserById = async (userId) => {
+  const user = await User.findOne({
+    where: {
+      id: userId
+    }
+  });
+
+  return user;
+}

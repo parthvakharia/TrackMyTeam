@@ -30,4 +30,8 @@ app
   .route('/login')
   .post(validator.body(validationSchema.login), controller.loginUser);
 
+app
+  .route('/logged-in-user-data/:token')
+  .get(validator.body(validationSchema.login), controller.loggedInUserData);
+
 module.exports = app;

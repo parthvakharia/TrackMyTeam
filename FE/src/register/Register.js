@@ -8,15 +8,13 @@ import {
   Platform,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
 import { RoundInput, RoundButton, Link, Colors } from '../common';
-import { register } from '../store/AuthActions';
-import StoreContext from '../store';
+import { useAuthContext } from '../provider/auth';
 
 const RegisterScreen = () => {
   const keyboardType =
     Platform.OS === 'ios' ? 'ascii-capable' : 'email-address';
-  const { store, dispatch } = useContext(StoreContext);
+  const { store, dispatch, register } = useAuthContext();
   const navigation = useNavigation();
   const firstNameRef = React.createRef();
   const lastNameRef = React.createRef();
@@ -31,12 +29,14 @@ const RegisterScreen = () => {
     password: '',
     location: [21.7833, 72.22334],
   });
+
   const onInputChange = (field) => (value) => {
     setState({
       ...state,
       [field]: value,
     });
   };
+
   const focusField = (fieldName) => () => {
     try {
       switch (fieldName) {
@@ -56,12 +56,12 @@ const RegisterScreen = () => {
           passwordRef.current.focus();
           break;
       }
-    } catch {}
+    } catch { }
   };
+
   const registerUser = async () => {
     Keyboard.dismiss();
-    const success = await register(store, dispatch, { ...state });
-    console.log(success);
+    const success = await register({ ...state });
     if (success) {
       Alert.alert(
         'Register',

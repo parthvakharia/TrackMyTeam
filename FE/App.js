@@ -1,32 +1,16 @@
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import React from 'react';
 import 'react-native-gesture-handler';
 // import { API_URL } from '@env';
-import StoreProvider from './src/store';
 import Layout from './Layout';
-const API_URL = "http://192.168.0.110:4040";
-const client = new ApolloClient({
-  uri: `${API_URL}/graphql`,
-  cache: new InMemoryCache(),
-  // Enable sending cookies over cross-origin requests
-  // credentials: 'include',
-  headers: {
-    authorization: 'Barrier frj slkfj dslkfjdslkfds',
-    'client-name': 'TrackMyTeam',
-    'client-version': '1.0.0',
-  },
-});
+import AuthProvider from './src/provider/auth';
+import GraphqlProvider from './src/provider/graphql';
 
 export default function App() {
-  if (client) {
-    return (
-      <ApolloProvider client={client}>
-        <StoreProvider>
-          <Layout />
-        </StoreProvider>
-      </ApolloProvider>
-    );
-  } else {
-    return null;
-  }
+  return (
+    <AuthProvider>
+      <GraphqlProvider>
+        <Layout />
+      </GraphqlProvider>
+    </AuthProvider>
+  );
 }

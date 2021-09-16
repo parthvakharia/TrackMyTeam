@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
-
 import LoginScreen from '../login';
 import DrawerNavigator from './DrawerNavigator';
 import RegisterScreen from '../register';
+import { useAuthContext } from '../provider/auth';
 import AddGroupScreen from '../group';
 
 const Stack = createStackNavigator();
@@ -13,13 +12,36 @@ const noHeader = {
   header: () => null,
 };
 
-const RootNavigation = () => (
-  <>
-    <Stack.Navigator initialRouteName="Home">
+const RootNavigation = () => {
+  const { store: { user } } = useAuthContext();
+
+  if (user) {
+    return (
+      <Stack.Navigator initialRouteName="Root">
+        <Stack.Screen
+          name="Root"
+          component={DrawerNavigator}
+          options={{
+            ...noHeader
+          }}
+        />
+        <Stack.Screen
+          name="Group"
+          component={AddGroupScreen}
+          options={{
+            ...noHeader
+          }}
+        />
+      </Stack.Navigator>
+    )
+  }
+
+  return (
+    <Stack.Navigator initialRouteName="Login">
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{  }}
+        options={{}}
       />
       <Stack.Screen
         name="Register"
@@ -27,22 +49,8 @@ const RootNavigation = () => (
         options={{
         }}
       />
-      <Stack.Screen
-        name="Home"
-        component={DrawerNavigator}
-        options={{
-          ...noHeader
-        }}
-      />
-      <Stack.Screen
-        name="Group"
-        component={AddGroupScreen}
-        options={{
-          gestureDirection: 'horizontal',
-        }}
-      />
     </Stack.Navigator>
-  </>
-);
+  )
+};
 
 export default RootNavigation;

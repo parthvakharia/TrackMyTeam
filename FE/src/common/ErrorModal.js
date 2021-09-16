@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Modal, View, Text, StyleSheet } from 'react-native';
 import { RoundButton, Colors } from '../common';
-import { GLOBAL_ERROR } from '../store/ActionTypes';
 
 const ErrorModal = ({ error = {}, visible, dispatch }) => {
   const [modalVisible, setModalVisible] = useState(true);
+
   const closeModal = () => {
     setModalVisible(!modalVisible);
-    dispatch({ type: GLOBAL_ERROR, payload: null });
+    // dispatch({ type: GLOBAL_ERROR, payload: null });
   };
 
   return (

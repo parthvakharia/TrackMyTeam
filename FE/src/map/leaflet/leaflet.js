@@ -24,8 +24,8 @@ const Leaflet = ({ mapMarkers, currentPosition }) => {
   }, []);
 
   useEffect(() => {
-    if (!leafletHTML) return;
-
+    if (!leafletHTML || !leafletRef.current) return;
+    
     const [latitude, longitude] = currentPosition;
     leafletRef.current.injectJavaScript(
       `setView(${latitude},${longitude},${zoomLevel});`

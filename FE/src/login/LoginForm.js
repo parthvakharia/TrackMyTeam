@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,16 +7,11 @@ import {
   Keyboard,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
-import { useStoreContext } from '../store';
 import { RoundButton, RoundInput, Link, Colors } from '../common';
-import { signIn } from '../store/AuthActions';
-
-// import { useDispatch } from 'react-redux'
+import { useAuthContext } from '../provider/auth';
 
 const LoginForm = ({ toggleLogin }) => {
-  const storeContext = useStoreContext();
-  const navigation = useNavigation();
+  const { signIn, store: { user } } = useAuthContext();
   const behaviour = Platform.OS == 'ios' ? 'padding' : 'height';
   const usernameRef = React.createRef();
   const passwordRef = React.createRef();
@@ -52,17 +47,14 @@ const LoginForm = ({ toggleLogin }) => {
     } catch { }
   };
 
-  const loginIn = async () => {
+  const loginIn = () => {
     Keyboard.dismiss();
     const { email, password } = state;
 
     if (email && password) {
-      const user = await signIn(storeContext.store, storeContext.dispatch, { email, password });
-
-      if (user)
-        navigation.navigate('Home');
+      signIn({ email, password });
     }
-  };
+  }
 
   useEffect(() => {
     focusField('username')();

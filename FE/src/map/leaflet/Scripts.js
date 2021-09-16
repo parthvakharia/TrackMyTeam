@@ -96,7 +96,6 @@ const mapFunctions = `
         data = JSON.parse(data);
         var marker = findMarker(data);
         if(marker) {
-            console.log('render marker',data);
             return updateMarker(marker, data);
         }
         var html = '<div><img class="map-icons" src="'+data.url+'?version='+Math.floor(Math.random() * 1000)+'"><div class="triangle-wrapper"><span class="triangle"></span></div></div>';

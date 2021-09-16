@@ -1,19 +1,14 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
-
-import { useStoreContext } from './src/store';
 import RootNavigation from './src/navigation';
 import { Colors, Loading, ErrorModal } from './src/common';
-import { useQuery } from '@apollo/client';
-import { GET_USERS } from './src/store/gql';
+import { useAuthContext } from './src/provider/auth';
 
 const Layout = () => {
-  const { store: { isLoading, error }, dispatch } = useStoreContext();
-
   return (
     <>
       <StatusBar style="auto" />
@@ -22,8 +17,8 @@ const Layout = () => {
           <RootNavigation />
         </NavigationContainer>
       </View>
-      {isLoading && <Loading />}
-      {!!error && <ErrorModal dispatch={dispatch} error={error} />}
+      {/* {isLoading && <Loading />}
+      {!!error && <ErrorModal dispatch={dispatch} error={error} />} */}
     </>
   );
 };
