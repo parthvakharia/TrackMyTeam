@@ -26,12 +26,12 @@ const GroupMemberList = ({ users, onDelete }) => {
     )
 
     return (
-        <View>
+        <View style={{ maxHeight: 100 }}>
             <View>
-                <Text>Group Members List</Text>
+                <Text>Members List</Text>
             </View>
             <FlatList
-                style={{ flex: 1, borderColor: 'red', borderWidth: 1, height: 100 }}
+                style={{ maxHeight: 100 }}
                 keyExtractor={keyExtractor}
                 renderItem={renderItems}
                 data={users}

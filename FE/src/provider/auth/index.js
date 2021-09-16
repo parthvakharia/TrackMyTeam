@@ -25,7 +25,6 @@ const AuthProvider = ({ children }) => {
             dispatch({ type: IS_LOADING, payload: true });
             const { token, user } = await AuthService.login(payload);
 
-            console.log(Platform.OS)
             if (Platform.OS !== 'web')
                 await SecureStore.setItemAsync('token', token, { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
 
@@ -67,7 +66,7 @@ const AuthProvider = ({ children }) => {
 
             if (Platform.OS !== 'web')
                 token = await SecureStore.getItemAsync('token', { keychainAccessible: SecureStore.ALWAYS_THIS_DEVICE_ONLY });
-
+                
             if (!token) throw new Error('No token found. Please login');
 
             const user = await AuthService.getLoggedInUser(token);
@@ -77,16 +76,14 @@ const AuthProvider = ({ children }) => {
                 { type: IS_LOADING, payload: false },
                 { type: IS_Logged_In_Check, payload: true },
             ];
-            actions.map(dispatch);
-            return !!token;
         } catch (e) {
-            const actions = [
+            actions = [
                 { type: IS_LOADING, payload: false },
                 { type: GLOBAL_ERROR, payload: e },
                 { type: IS_Logged_In_Check, payload: true },
             ];
-            actions.map(dispatch);
         }
+        actions.map(dispatch);
     }
 
     useEffect(() => {

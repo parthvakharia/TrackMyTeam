@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, View, Text, StyleSheet } from 'react-native';
-import { RoundButton, Colors } from '../common';
+import RoundButton from './RoundButton';
+import Colors from './Colors';
 
 const ErrorModal = ({ error = {}, visible, dispatch }) => {
   const [modalVisible, setModalVisible] = useState(true);

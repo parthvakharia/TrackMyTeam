@@ -7,7 +7,7 @@ import MapScreen from '../map';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-  const gotoAddFroup = () => {
+  const gotoAddGroup = () => {
     navigation.navigate('Group');
   };
 
@@ -17,7 +17,7 @@ const HomeScreen = () => {
       rightBtnProps={{
         title: 'Groups',
         icon: Platform.OS === 'ios' ? 'ios-add' : 'md-add',
-        onPress: gotoAddFroup,
+        onPress: gotoAddGroup,
       }}
     >
       <MapScreen />

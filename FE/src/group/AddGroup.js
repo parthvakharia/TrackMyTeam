@@ -1,32 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  FlatList
-} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useMutation } from '@apollo/client';
-import { SEARCH_USERS, CREATE_GROUP, CREATE_GROUP_MEMBER } from '../store/gql';
+import { CREATE_GROUP, CREATE_GROUP_MEMBER } from '../store/gql';
 import ViewWithHeader, { MenuBtn } from '../common/Header';
 import { Colors, AnimatedInput } from '../common';
-import { useDebounce, useDebouncedCallback } from 'use-debounce';
 import { Button } from 'react-native-elements'
 import SearchUsersList from './SearchUsersList';
 import GroupMemberList from './GroupMemberList';
-
-const LOGGED_IN_USER_ID = 1;
+import { useAuthContext } from '../provider/auth';
 
 const AddGroupScreen = (params) => {
-  const navigation = useNavigation();
+  const { store: { user: loggedInUser } } = useAuthContext();
   const [state, setState] = useState({
     name: '',
     description: '',
-    addedGroupMembers: [{ firstName: 'helloworld', id: 1 }],
-    searchText: '',
-    isSearchFieldFocused: false
+    addedGroupMembers: [],
   });
-  const [debouncedSearchText] = useDebounce(state.searchText, 1000);
   const [createGroup, { data: { createGroup: createdGroup } = {} }] = useMutation(CREATE_GROUP);
   const [createGroupMember] = useMutation(CREATE_GROUP_MEMBER);
   const onInputChange = (field) => (value) => setState({ ...state, [field]: value });
@@ -51,14 +41,6 @@ const AddGroupScreen = (params) => {
       });
     }
   }, [createdGroup])
-
-  const changeSearchFieldFocus = useDebouncedCallback((focus) =>
-    setState({
-      ...state,
-      isSearchFieldFocused: focus
-    }),
-    200
-  )
 
   const onUserSelect = (user) => {
     const { addedGroupMembers } = state;
@@ -95,7 +77,7 @@ const AddGroupScreen = (params) => {
     const groupInput = {
       name,
       description,
-      ownerId: LOGGED_IN_USER_ID,
+      ownerId: loggedInUser.id,
       createdAt: date,
       updatedAt: date
     }
@@ -126,24 +108,12 @@ const AddGroupScreen = (params) => {
           value={state.description}
           onChangeText={onInputChange('description')}
         />
-        <AnimatedInput
-          label="Search users by Email/Phonenumber"
-          value={state.searchText}
-          onChangeText={onInputChange('searchText')}
-          onFocus={() => changeSearchFieldFocus(true)}
-          onBlur={() => changeSearchFieldFocus(false)}
-        />
-        {
-          state.isSearchFieldFocused &&
-          <SearchUsersList
-            state={state}
-            setState={setState}
-            searchText={debouncedSearchText}
-            onUserSelect={onUserSelect}
-          />
-        }
         <GroupMemberList users={state.addedGroupMembers} onDelete={onDeleteGroupMember} />
-        {/* <Button onPress={createGroupHandler} title="Create Group" icon={<Ionicons name="add-outline" />}></Button> */}
+        <SearchUsersList
+          state={state}
+          onUserSelect={onUserSelect}
+        />
+        <Button onPress={createGroupHandler} title="Create Group" icon={<Ionicons name="add-outline" />}></Button>
       </View>
     </ViewWithHeader>
   );

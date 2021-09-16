@@ -20,6 +20,9 @@ const validationSchema = {
     email: joi.string().email().required(),
     password: joi.string().required(),
   }),
+  loggedInUser: joi.object({
+    token: joi.string().required()
+  })
 };
 
 app
@@ -32,6 +35,6 @@ app
 
 app
   .route('/logged-in-user-data/:token')
-  .get(validator.body(validationSchema.login), controller.loggedInUserData);
+  .get(validator.params(validationSchema.loggedInUser), controller.loggedInUserData);
 
 module.exports = app;

@@ -8,7 +8,7 @@ const GraphqlProvider = ({ children }) => {
 
     useEffect(() => {
         if (!token) return;
-        console.log(token);
+        
         const API_URL = "http://192.168.0.110:4040";
         const client = new ApolloClient({
             uri: `${API_URL}/graphql`,

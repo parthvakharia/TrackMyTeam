@@ -58,7 +58,6 @@ const MapScreen = () => {
   const leafletRef = useRef();
   const [initialRegion, setInitialRegion] = useState([1, 1]);
   const [state, setMapScreenState] = useState({
-    statusBarHeight: 0,
     mapDimension: {
       width: '100%',
       height: 100,
@@ -88,11 +87,10 @@ const MapScreen = () => {
   const watchLocation = ({ coords }) => {
     setInitialRegion([coords.latitude, coords.longitude]);
   };
-
-  const { statusBarHeight, mapDimension } = state;
+  
   return (
     <ViewWithHeader header={false}>
-      <View style={[styles.container, { paddingTop: statusBarHeight }]}>
+      <View style={[styles.container]}>
         <Leaflet
           leafletRef={(ref) => (leafletRef = ref)}
           mapMarkers={groupUsersLocations}
