@@ -1,62 +1,57 @@
 const express = require('express');
 const config = require('../config');
 const { postgraphile } = require('postgraphile');
+const { verifyToken } = require('../helper/jwt');
 const app = express.Router();
 
-const postgraphileOptions = {
-  dev: {
-    subscriptions: true,
-    watchPg: true,
-    dynamicJson: true,
-    setofFunctionsContainNulls: false,
-    ignoreRBAC: false,
-    ignoreIndexes: false,
-    graphqlRoute: '/graphql',
-    graphiqlRoute: '/graphiql',
-    showErrorStack: 'json',
-    extendedErrors: ['hint', 'detail', 'errcode'],
-    appendPlugins: [
-      require('@graphile-contrib/pg-simplify-inflector'),
-      require("postgraphile-plugin-connection-filter")
-    ],
-    exportGqlSchemaPath: 'schema.graphql',
-    graphiql: true,
-    enhanceGraphiql: true,
-    allowExplain(req) {
-      // TODO: customise condition!
-      return true;
-    },
-    enableQueryBatching: true,
-    legacyRelations: 'omit',
-    pgSettings(req) {
-      /* TODO */
-    },
+const devPostGraphileOptions = {
+  watchPg: true,
+  extendedErrors: ['hint', 'detail', 'errcode'],
+  graphiqlRoute: '/graphiql',
+  showErrorStack: 'json',
+  exportGqlSchemaPath: 'schema.graphql',
+  graphiql: true,
+  enhanceGraphiql: true,
+  disableQueryLog: false,
+  allowExplain(req) {
+    // TODO: customise condition!
+    return true;
   },
-  prod: {
-    subscriptions: true,
-    retryOnInitFail: true,
-    dynamicJson: true,
-    setofFunctionsContainNulls: false,
-    ignoreRBAC: false,
-    ignoreIndexes: false,
-    graphqlRoute: '/graphql',
-    extendedErrors: ['errcode'],
-    appendPlugins: [
-      require('@graphile-contrib/pg-simplify-inflector'),
-      require('postgraphile-plugin-connection-filter')
-    ],
-    graphiql: false,
-    enableQueryBatching: true,
-    disableQueryLog: true, // our default logging has performance issues, but do make sure you have a logging system in place!
-    legacyRelations: 'omit',
-    pgSettings(req) {
-      /* TODO */
-    },
-  },
+  pgSettings: async () => { }
+}
+
+const prodPostgraphileOptions = {
+  subscriptions: true,
+  dynamicJson: true,
+  enableQueryBatching: true,
+  setofFunctionsContainNulls: false,
+  ignoreRBAC: false,
+  ignoreIndexes: false,
+  graphqlRoute: '/graphql',
+  extendedErrors: ['errcode'],
+  legacyRelations: 'omit',
+  graphiql: false,
+  retryOnInitFail: true,
+  disableQueryLog: true,
+  appendPlugins: [
+    require('@graphile-contrib/pg-simplify-inflector'),
+    require('postgraphile-plugin-connection-filter')
+  ],
+  pgSettings: async (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    const token = authHeader?.replace('Barrier ', '') || "error";
+    const tokenData = await verifyToken(token);
+    const loggedInUser = tokenData?.userId;
+
+    if (!loggedInUser)
+      throw new Error('No user found');
+
+    req.loggedInUserId = loggedInUserId;
+  }
 };
 
 app.use(
-  postgraphile(config.DATABASE_URL, 'public', postgraphileOptions[config.ENV])
+  postgraphile(config.DATABASE_URL, 'public', config.ENV === 'prod' ? prodPostgraphileOptions : { ...prodPostgraphileOptions, ...devPostGraphileOptions })
 );
 
 module.exports = app;

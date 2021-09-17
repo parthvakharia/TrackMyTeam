@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableHighlight, Text } from 'react-native';
-import { Colors } from '../common';
+import Colors from './Colors';
 
 const Link = ({
   title = 'link',
